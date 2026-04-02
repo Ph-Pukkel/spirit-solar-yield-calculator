@@ -29,7 +29,8 @@
     "systemLoss": "System losses",
     "calculate": "Calculate yield",
     "calculating": "Calculating...",
-    "wpTooltip": "Enter the peak power in Watt-peak (Wp) per side of the column"
+    "wpTooltip": "Enter the peak power in Watt-peak (Wp) per side of the column",
+    "lossTooltip": "System losses include cable losses, inverter efficiency, dust/soiling on panels, temperature effects and degradation. The default of 14% is a common value for most installations."
   },
   "results": {
     "title": "Results",
@@ -97,5 +98,24 @@
     "10": "October",
     "11": "November",
     "12": "December"
+  },
+  "admin": {
+    "title": "Panel Configuration Management",
+    "backToCalculator": "Back to calculator",
+    "addPreset": "Add Preset",
+    "editPreset": "Edit Preset",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this preset?",
+    "name": "Name",
+    "description": "Description",
+    "wpPerSide": "Wp per side",
+    "technology": "Technology",
+    "systemLoss": "System loss %",
+    "isDefault": "Default preset",
+    "noSupabase": "Supabase is not configured. Set the environment variables to manage presets.",
+    "saved": "Saved",
+    "deleted": "Deleted"
   }
 }

@@ -31,6 +31,7 @@ export default function ConfigPanel({
   const [wpWest, setWpWest] = useState(0);
   const [loss, setLoss] = useState(14);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showLossTooltip, setShowLossTooltip] = useState(false);
 
   const handlePresetChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -182,7 +183,25 @@ export default function ConfigPanel({
       {/* System loss slider */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <label className="text-sm text-[#9ca3af]">{t.config.systemLoss}</label>
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-[#9ca3af]">{t.config.systemLoss}</label>
+            <div className="relative">
+              <button
+                type="button"
+                onMouseEnter={() => setShowLossTooltip(true)}
+                onMouseLeave={() => setShowLossTooltip(false)}
+                onClick={() => setShowLossTooltip(!showLossTooltip)}
+                className="w-5 h-5 rounded-full bg-[#4b5563] text-white text-xs flex items-center justify-center hover:bg-[#7ab648] transition-colors"
+              >
+                ?
+              </button>
+              {showLossTooltip && (
+                <div className="absolute z-10 left-7 top-1/2 -translate-y-1/2 w-64 px-3 py-2 rounded-lg bg-[#1a1a1a] border border-white/10 text-xs text-[#9ca3af] shadow-lg">
+                  {t.config.lossTooltip}
+                </div>
+              )}
+            </div>
+          </div>
           <span className="text-sm font-medium text-white">{loss}%</span>
         </div>
         <input

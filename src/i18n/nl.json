@@ -29,7 +29,8 @@
     "systemLoss": "Systeemverliezen",
     "calculate": "Bereken opbrengst",
     "calculating": "Berekenen...",
-    "wpTooltip": "Voer het piekvermogen in Wattpiek (Wp) in per zijde van de kolom"
+    "wpTooltip": "Voer het piekvermogen in Wattpiek (Wp) in per zijde van de kolom",
+    "lossTooltip": "Systeemverliezen omvatten kabelverliezen, omvormerefficiëntie, stof/vuil op panelen, temperatuureffecten en degradatie. Standaard 14% is een gangbare waarde voor de meeste installaties."
   },
   "results": {
     "title": "Resultaten",
@@ -97,5 +98,24 @@
     "10": "Oktober",
     "11": "November",
     "12": "December"
+  },
+  "admin": {
+    "title": "Paneelconfiguratie Beheer",
+    "backToCalculator": "Terug naar calculator",
+    "addPreset": "Preset toevoegen",
+    "editPreset": "Preset bewerken",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "confirmDelete": "Weet je zeker dat je deze preset wilt verwijderen?",
+    "name": "Naam",
+    "description": "Beschrijving",
+    "wpPerSide": "Wp per zijde",
+    "technology": "Technologie",
+    "systemLoss": "Systeemverliezen %",
+    "isDefault": "Standaard preset",
+    "noSupabase": "Supabase is niet geconfigureerd. Stel de environment variabelen in om presets te beheren.",
+    "saved": "Opgeslagen",
+    "deleted": "Verwijderd"
   }
 }
