@@ -31,14 +31,14 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
 
   return (
     <div className="glass-card p-5">
-      <h3 className="text-lg font-semibold text-spirit-white mb-4">
+      <h3 className="text-lg font-semibold text-[#1A1B1A] mb-4">
         {t.results.detailTable}
       </h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="sticky top-0 bg-[#2d2d2d] z-10">
-              <th className="text-left py-3 px-3 text-spirit-gray-400 font-medium">
+            <tr className="sticky top-0 bg-[#F5F5F5] z-10">
+              <th className="text-left py-3 px-3 text-[#707070] font-medium">
                 {t.results.month}
               </th>
               {directionHeaders.map((dir) => (
@@ -71,29 +71,29 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
             {data.map((row, i) => (
               <tr
                 key={row.month}
-                className={`border-t border-white/5 ${
-                  i % 2 === 0 ? 'bg-white/[0.02]' : ''
-                } hover:bg-white/[0.05] transition-colors`}
+                className={`border-t border-[#E5E5E5] ${
+                  i % 2 === 0 ? 'bg-white' : 'bg-[#F9F9F8]'
+                } hover:bg-[#F0EDE8] transition-colors`}
               >
-                <td className="py-2.5 px-3 text-spirit-gray-200 font-medium">
+                <td className="py-2.5 px-3 text-[#1A1B1A] font-medium">
                   {months[String(row.month)]}
                 </td>
-                <td className="py-2.5 px-3 text-right text-spirit-gray-200">
+                <td className="py-2.5 px-3 text-right text-[#3E3D3D]">
                   {formatNumber(row.north_wh_day, 0, locale)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-spirit-gray-200">
+                <td className="py-2.5 px-3 text-right text-[#3E3D3D]">
                   {formatNumber(row.east_wh_day, 0, locale)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-spirit-gray-200">
+                <td className="py-2.5 px-3 text-right text-[#3E3D3D]">
                   {formatNumber(row.south_wh_day, 0, locale)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-spirit-gray-200">
+                <td className="py-2.5 px-3 text-right text-[#3E3D3D]">
                   {formatNumber(row.west_wh_day, 0, locale)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-spirit-white font-semibold">
+                <td className="py-2.5 px-3 text-right text-[#1A1B1A] font-semibold">
                   {formatNumber(row.total_wh_day, 0, locale)}
                 </td>
-                <td className="py-2.5 px-3 text-right text-spirit-white font-semibold">
+                <td className="py-2.5 px-3 text-right text-[#1A1B1A] font-semibold">
                   {formatNumber(row.total_kwh_month, 1, locale)}
                 </td>
               </tr>
@@ -104,19 +104,19 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
               <td className="py-3 px-3 text-spirit-cinnabar font-bold">
                 {t.results.yearAvg} / {t.results.yearTotal}
               </td>
-              <td className="py-3 px-3 text-right text-spirit-gray-200 font-semibold">
+              <td className="py-3 px-3 text-right text-[#3E3D3D] font-semibold">
                 {formatNumber(yearAvgNorth, 0, locale)}
               </td>
-              <td className="py-3 px-3 text-right text-spirit-gray-200 font-semibold">
+              <td className="py-3 px-3 text-right text-[#3E3D3D] font-semibold">
                 {formatNumber(yearAvgEast, 0, locale)}
               </td>
-              <td className="py-3 px-3 text-right text-spirit-gray-200 font-semibold">
+              <td className="py-3 px-3 text-right text-[#3E3D3D] font-semibold">
                 {formatNumber(yearAvgSouth, 0, locale)}
               </td>
-              <td className="py-3 px-3 text-right text-spirit-gray-200 font-semibold">
+              <td className="py-3 px-3 text-right text-[#3E3D3D] font-semibold">
                 {formatNumber(yearAvgWest, 0, locale)}
               </td>
-              <td className="py-3 px-3 text-right text-spirit-white font-bold">
+              <td className="py-3 px-3 text-right text-[#1A1B1A] font-bold">
                 {formatNumber(yearAvgTotal, 0, locale)}
               </td>
               <td className="py-3 px-3 text-right text-spirit-cinnabar font-bold">

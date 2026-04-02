@@ -150,9 +150,9 @@ export default function AdminPage() {
 
   if (!supabase) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-8">
+      <div className="min-h-screen flex items-center justify-center p-8 bg-[#EDEAE5]">
         <div className="glass-card p-8 max-w-md text-center">
-          <p className="text-spirit-gray-200">{a.noSupabase || 'Supabase is not configured.'}</p>
+          <p className="text-[#707070]">{a.noSupabase || 'Supabase is not configured.'}</p>
           <a href="/" className="mt-4 inline-block text-spirit-cinnabar hover:underline">
             {a.backToCalculator || 'Back to calculator'}
           </a>
@@ -162,7 +162,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-spirit-black">
+    <div className="min-h-screen bg-[#EDEAE5]">
       {/* Header */}
       <header className="w-full bg-spirit-black border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
@@ -198,7 +198,7 @@ export default function AdminPage() {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         {/* Title and Add button */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-spirit-white">
+          <h1 className="text-2xl font-semibold text-[#1A1B1A]">
             {a.title || 'Panel Configuration Management'}
           </h1>
           {!showAddForm && (
@@ -228,45 +228,45 @@ export default function AdminPage() {
         {/* Add/Edit form */}
         {showAddForm && (
           <div className="glass-card p-6 mb-6">
-            <h2 className="text-lg font-semibold text-spirit-white mb-4">
+            <h2 className="text-lg font-semibold text-[#1A1B1A] mb-4">
               {editingId ? (a.editPreset || 'Edit Preset') : (a.addPreset || 'Add Preset')}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Name */}
               <div>
-                <label className="block text-sm text-spirit-gray-400 mb-1">
+                <label className="block text-sm text-[#707070] mb-1">
                   {a.name || 'Name'} *
                 </label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] focus:outline-none focus:border-[#E14C2A] transition-colors"
                 />
               </div>
 
               {/* Wp per side */}
               <div>
-                <label className="block text-sm text-spirit-gray-400 mb-1">
+                <label className="block text-sm text-[#707070] mb-1">
                   {a.wpPerSide || 'Wp per side'}
                 </label>
                 <input
                   type="number"
                   value={form.wp_per_side}
                   onChange={(e) => setForm({ ...form, wp_per_side: Number(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] focus:outline-none focus:border-[#E14C2A] transition-colors"
                 />
               </div>
 
               {/* Technology */}
               <div>
-                <label className="block text-sm text-spirit-gray-400 mb-1">
+                <label className="block text-sm text-[#707070] mb-1">
                   {a.technology || 'Technology'}
                 </label>
                 <select
                   value={form.technology}
                   onChange={(e) => setForm({ ...form, technology: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] focus:outline-none focus:border-[#E14C2A] transition-colors"
                 >
                   <option value="crystSi">crystSi</option>
                   <option value="CIS">CIS</option>
@@ -276,33 +276,33 @@ export default function AdminPage() {
 
               {/* System loss */}
               <div>
-                <label className="block text-sm text-spirit-gray-400 mb-1">
+                <label className="block text-sm text-[#707070] mb-1">
                   {a.systemLoss || 'System loss %'}
                 </label>
                 <input
                   type="number"
                   value={form.system_loss}
                   onChange={(e) => setForm({ ...form, system_loss: Number(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] focus:outline-none focus:border-[#E14C2A] transition-colors"
                 />
               </div>
 
               {/* Description */}
               <div className="sm:col-span-2">
-                <label className="block text-sm text-spirit-gray-400 mb-1">
+                <label className="block text-sm text-[#707070] mb-1">
                   {a.description || 'Description'}
                 </label>
                 <input
                   type="text"
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] focus:outline-none focus:border-[#E14C2A] transition-colors"
                 />
               </div>
 
               {/* Is default */}
               <div className="sm:col-span-2">
-                <label className="flex items-center gap-2 text-sm text-spirit-gray-200 cursor-pointer">
+                <label className="flex items-center gap-2 text-sm text-[#1A1B1A] cursor-pointer">
                   <input
                     type="checkbox"
                     checked={form.is_default}
@@ -326,7 +326,7 @@ export default function AdminPage() {
               </button>
               <button
                 onClick={resetForm}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-200 hover:bg-spirit-gray-800 transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] hover:bg-[#F0EDE8] transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
                 {a.cancel || 'Cancel'}
@@ -338,16 +338,16 @@ export default function AdminPage() {
         {/* Presets table */}
         <div className="glass-card overflow-hidden">
           {loading ? (
-            <div className="p-8 text-center text-spirit-gray-400">Loading...</div>
+            <div className="p-8 text-center text-[#707070]">Loading...</div>
           ) : presets.length === 0 ? (
-            <div className="p-8 text-center text-spirit-gray-400">
+            <div className="p-8 text-center text-[#707070]">
               {locale === 'nl' ? 'Geen presets gevonden.' : 'No presets found.'}
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 text-spirit-gray-400">
+                  <tr className="border-b border-[#E5E5E5] bg-[#F5F5F5] text-[#707070]">
                     <th className="text-left px-4 py-3 font-medium">{a.name || 'Name'}</th>
                     <th className="text-left px-4 py-3 font-medium">{a.wpPerSide || 'Wp per side'}</th>
                     <th className="text-left px-4 py-3 font-medium">{a.technology || 'Technology'}</th>
@@ -360,12 +360,12 @@ export default function AdminPage() {
                   {presets.map((preset) => (
                     <tr
                       key={preset.id}
-                      className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                      className="border-b border-[#E5E5E5] hover:bg-[#F0EDE8] transition-colors"
                     >
-                      <td className="px-4 py-3 text-spirit-white font-medium">{preset.name}</td>
-                      <td className="px-4 py-3 text-spirit-gray-200">{preset.wp_per_side}</td>
-                      <td className="px-4 py-3 text-spirit-gray-200">{preset.technology}</td>
-                      <td className="px-4 py-3 text-spirit-gray-200">{preset.system_loss}%</td>
+                      <td className="px-4 py-3 text-[#1A1B1A] font-medium">{preset.name}</td>
+                      <td className="px-4 py-3 text-[#3E3D3D]">{preset.wp_per_side}</td>
+                      <td className="px-4 py-3 text-[#3E3D3D]">{preset.technology}</td>
+                      <td className="px-4 py-3 text-[#3E3D3D]">{preset.system_loss}%</td>
                       <td className="px-4 py-3">
                         {preset.is_default && (
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-spirit-cinnabar/20 text-spirit-cinnabar">

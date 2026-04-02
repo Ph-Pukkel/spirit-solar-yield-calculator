@@ -54,13 +54,13 @@ export default function SummaryCards({ result, locale }: SummaryCardsProps) {
         <div key={i} className="glass-card p-5 flex flex-col gap-3">
           <div className="flex items-center gap-3">
             {card.icon}
-            <span className="text-sm text-spirit-gray-400">{card.label}</span>
+            <span className="text-sm text-[#707070]">{card.label}</span>
           </div>
           <div>
-            <span className="text-2xl font-bold text-spirit-white">
+            <span className="text-2xl font-bold text-[#1A1B1A]">
               {card.value}
             </span>
-            <span className="ml-2 text-sm text-spirit-gray-400">
+            <span className="ml-2 text-sm text-[#707070]">
               {card.unit}
             </span>
           </div>

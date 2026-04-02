@@ -124,7 +124,7 @@ export default function LocationMap({ latitude, longitude, searchPlaceholder, on
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
           placeholder={searchPlaceholder}
-          className="w-full px-4 py-2.5 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#9ca3af] focus:outline-none focus:border-[#E14C2A] transition-colors"
+          className="w-full px-4 py-2.5 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] placeholder-[#A5A5A4] focus:outline-none focus:border-[#E14C2A] transition-colors"
         />
         {/* Search icon */}
         <svg
@@ -138,12 +138,12 @@ export default function LocationMap({ latitude, longitude, searchPlaceholder, on
 
         {/* Dropdown results */}
         {showResults && searchResults.length > 0 && (
-          <ul className="absolute z-[1000] w-full mt-1 rounded-lg bg-[#2d2d2d] border border-white/10 overflow-hidden shadow-lg">
+          <ul className="absolute z-[1000] w-full mt-1 rounded-lg bg-white border border-[#D7D3CD] overflow-hidden shadow-lg">
             {searchResults.map((result) => (
               <li
                 key={result.place_id}
                 onClick={() => handleSelectResult(result)}
-                className="px-4 py-2.5 text-sm text-white cursor-pointer hover:bg-[#3d3d3d] transition-colors border-b border-white/5 last:border-b-0"
+                className="px-4 py-2.5 text-sm text-[#1A1B1A] cursor-pointer hover:bg-[#F5F5F5] transition-colors border-b border-[#E5E5E5] last:border-b-0"
               >
                 {result.display_name}
               </li>

@@ -49,7 +49,7 @@ export default function LocationPicker({
 
   return (
     <div className="glass-card p-6 w-full">
-      <h2 className="text-xl font-semibold text-white mb-4">{t.location.title}</h2>
+      <h2 className="text-xl font-semibold text-[#1A1B1A] mb-4">{t.location.title}</h2>
 
       <LocationMap
         latitude={latitude}
@@ -61,25 +61,25 @@ export default function LocationPicker({
       {/* Coordinate inputs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
         <div>
-          <label className="block text-sm text-[#9ca3af] mb-1">{t.location.latitude}</label>
+          <label className="block text-sm text-[#707070] mb-1">{t.location.latitude}</label>
           <input
             type="number"
             step="any"
             value={latitude !== null ? latitude : ''}
             onChange={handleLatChange}
             placeholder="51.5074"
-            className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#E14C2A] transition-colors"
+            className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] placeholder-[#A5A5A4] focus:outline-none focus:border-[#E14C2A] transition-colors"
           />
         </div>
         <div>
-          <label className="block text-sm text-[#9ca3af] mb-1">{t.location.longitude}</label>
+          <label className="block text-sm text-[#707070] mb-1">{t.location.longitude}</label>
           <input
             type="number"
             step="any"
             value={longitude !== null ? longitude : ''}
             onChange={handleLonChange}
             placeholder="10.0000"
-            className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#E14C2A] transition-colors"
+            className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] placeholder-[#A5A5A4] focus:outline-none focus:border-[#E14C2A] transition-colors"
           />
         </div>
       </div>
@@ -87,14 +87,14 @@ export default function LocationPicker({
       {/* Location name */}
       {locationName && (
         <div className="mt-3">
-          <span className="text-sm text-[#9ca3af]">{t.location.locationName}: </span>
-          <span className="text-sm text-white">{locationName}</span>
+          <span className="text-sm text-[#707070]">{t.location.locationName}: </span>
+          <span className="text-sm text-[#1A1B1A]">{locationName}</span>
         </div>
       )}
 
       {/* No location hint */}
       {latitude === null && longitude === null && (
-        <p className="mt-3 text-sm text-[#9ca3af] italic">{t.location.clickMap}</p>
+        <p className="mt-3 text-sm text-[#707070] italic">{t.location.clickMap}</p>
       )}
 
       {/* Polar warning */}

@@ -26,7 +26,7 @@ export default function ResultsDashboard({ result, locale, onReset }: ResultsDas
 
   return (
     <section ref={sectionRef} className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      <h2 className="text-2xl font-bold text-spirit-white">{t.results.title}</h2>
+      <h2 className="text-2xl font-bold text-[#1A1B1A]">{t.results.title}</h2>
 
       <SummaryCards result={result} locale={locale} />
 
@@ -38,7 +38,7 @@ export default function ResultsDashboard({ result, locale, onReset }: ResultsDas
         <PdfExport result={result} locale={locale} />
         <button
           onClick={onReset}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-spirit-dark border border-white/10 hover:bg-white/10 text-spirit-gray-200 font-medium transition-colors cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-[#D7D3CD] hover:bg-[#F0EDE8] text-[#1A1B1A] font-medium transition-colors cursor-pointer"
         >
           <RotateCcw className="w-4 h-4" />
           {t.results.newCalculation}

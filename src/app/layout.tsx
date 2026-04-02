@@ -31,7 +31,7 @@ export default function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[var(--spirit-black)] text-white font-[var(--font-open-sans)]">
+      <body className="min-h-full flex flex-col bg-[#EDEAE5] text-[#1A1B1A] font-[var(--font-open-sans)]">
         {children}
       </body>
     </html>

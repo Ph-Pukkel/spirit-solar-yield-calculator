@@ -16,7 +16,7 @@ export default function LoadingState({ step, locale }: LoadingStateProps) {
   const stepText = (t.loading as LoadingKeys)[step as keyof LoadingKeys] ?? step;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-spirit-black/80 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#EDEAE5]/80 backdrop-blur-sm">
       <div className="glass-card p-10 flex flex-col items-center gap-6 max-w-sm w-full mx-4">
         {/* Animated sun SVG */}
         <div className="relative w-20 h-20">
@@ -80,7 +80,7 @@ export default function LoadingState({ step, locale }: LoadingStateProps) {
 
         {/* Text */}
         <div className="text-center space-y-2">
-          <p className="text-spirit-white font-medium text-lg">
+          <p className="text-[#1A1B1A] font-medium text-lg">
             {t.loading.calculating}
           </p>
           <p className="text-spirit-cinnabar text-sm animate-pulse">

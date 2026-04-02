@@ -52,8 +52,8 @@ function CustomTooltip({ active, payload, label, locale, mode }: CustomTooltipPr
   const unit = mode === 'daily' ? t.results.whPerDay : t.results.kwhPerMonth;
 
   return (
-    <div className="bg-[#1a1a1a] border border-white/10 rounded-lg p-3 shadow-xl">
-      <p className="text-spirit-white font-semibold mb-2">{label}</p>
+    <div className="bg-white border border-[#D7D3CD] rounded-lg p-3 shadow-md">
+      <p className="text-[#1A1B1A] font-semibold mb-2">{label}</p>
       {payload.map((entry, i) => (
         <div key={i} className="flex items-center justify-between gap-4 text-sm">
           <div className="flex items-center gap-2">
@@ -61,15 +61,15 @@ function CustomTooltip({ active, payload, label, locale, mode }: CustomTooltipPr
               className="w-2.5 h-2.5 rounded-full inline-block"
               style={{ backgroundColor: entry.color }}
             />
-            <span className="text-spirit-gray-200">{entry.name}</span>
+            <span className="text-[#3E3D3D]">{entry.name}</span>
           </div>
-          <span className="text-spirit-white font-medium">
+          <span className="text-[#1A1B1A] font-medium">
             {formatNumber(entry.value, mode === 'daily' ? 0 : 1, locale)}
           </span>
         </div>
       ))}
-      <div className="border-t border-white/10 mt-2 pt-2 flex items-center justify-between text-sm">
-        <span className="text-spirit-gray-400">{t.results.total}</span>
+      <div className="border-t border-[#E5E5E5] mt-2 pt-2 flex items-center justify-between text-sm">
+        <span className="text-[#707070]">{t.results.total}</span>
         <span className="text-spirit-cinnabar font-bold">
           {formatNumber(total, mode === 'daily' ? 0 : 1, locale)} {unit}
         </span>
@@ -88,7 +88,7 @@ function CustomLegend({ payload }: { payload?: LegendPayloadEntry[] }) {
   return (
     <div className="flex flex-wrap justify-center gap-4 mt-2">
       {payload.map((entry, i) => (
-        <div key={i} className="flex items-center gap-1.5 text-sm text-spirit-gray-200">
+        <div key={i} className="flex items-center gap-1.5 text-sm text-[#1A1B1A]">
           <span
             className="w-3 h-3 rounded-full inline-block"
             style={{ backgroundColor: entry.color }}
@@ -119,16 +119,16 @@ export default function MonthlyChart({ data, locale }: MonthlyChartProps) {
   return (
     <div className="glass-card p-5">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-        <h3 className="text-lg font-semibold text-spirit-white">
+        <h3 className="text-lg font-semibold text-[#1A1B1A]">
           {t.results.monthlyChart}
         </h3>
-        <div className="flex rounded-lg overflow-hidden border border-white/10">
+        <div className="flex rounded-lg overflow-hidden border border-[#D7D3CD]">
           <button
             onClick={() => setMode('daily')}
             className={`px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
               mode === 'daily'
                 ? 'bg-spirit-cinnabar text-white'
-                : 'bg-spirit-dark text-spirit-gray-400 hover:text-spirit-white'
+                : 'bg-white text-[#707070] hover:text-[#1A1B1A]'
             }`}
           >
             {t.results.dailyAvg}
@@ -138,7 +138,7 @@ export default function MonthlyChart({ data, locale }: MonthlyChartProps) {
             className={`px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
               mode === 'monthly'
                 ? 'bg-spirit-cinnabar text-white'
-                : 'bg-spirit-dark text-spirit-gray-400 hover:text-spirit-white'
+                : 'bg-white text-[#707070] hover:text-[#1A1B1A]'
             }`}
           >
             {t.results.monthlyTotal}
@@ -148,28 +148,28 @@ export default function MonthlyChart({ data, locale }: MonthlyChartProps) {
 
       <ResponsiveContainer width="100%" height={360}>
         <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
           <XAxis
             dataKey="name"
-            tick={{ fill: '#9ca3af', fontSize: 12 }}
-            axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+            tick={{ fill: '#707070', fontSize: 12 }}
+            axisLine={{ stroke: 'rgba(0,0,0,0.1)' }}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: '#9ca3af', fontSize: 12 }}
-            axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+            tick={{ fill: '#707070', fontSize: 12 }}
+            axisLine={{ stroke: 'rgba(0,0,0,0.1)' }}
             tickLine={false}
             label={{
               value: yLabel,
               angle: -90,
               position: 'insideLeft',
-              style: { fill: '#9ca3af', fontSize: 12 },
+              style: { fill: '#707070', fontSize: 12 },
               offset: 0,
             }}
           />
           <Tooltip
             content={<CustomTooltip locale={locale} mode={mode} />}
-            cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+            cursor={{ fill: 'rgba(0,0,0,0.03)' }}
           />
           <Legend content={<CustomLegend />} />
           <Bar dataKey={t.config.north} stackId="a" fill={DIRECTION_COLORS.north} radius={[0, 0, 0, 0]} />
