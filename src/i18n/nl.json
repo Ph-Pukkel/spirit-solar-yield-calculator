@@ -1,0 +1,101 @@
+{
+  "app": {
+    "title": "Solar Yield Calculator",
+    "subtitle": "Bereken de opbrengst van uw verticale zonnepanelen"
+  },
+  "header": {
+    "language": "EN"
+  },
+  "location": {
+    "title": "Locatie selecteren",
+    "searchPlaceholder": "Zoek een locatie...",
+    "latitude": "Breedtegraad",
+    "longitude": "Lengtegraad",
+    "locationName": "Locatie",
+    "clickMap": "Klik op de kaart om een locatie te selecteren",
+    "polarWarning": "Let op: bij breedtegraden boven 66° zijn de resultaten beperkt betrouwbaar door poolnacht-scenario's."
+  },
+  "config": {
+    "title": "Paneelconfiguratie",
+    "preset": "Preset",
+    "selectPreset": "Selecteer een preset...",
+    "manualInput": "Handmatige invoer",
+    "wpPerSide": "Wp per zijde",
+    "allSidesEqual": "Alle zijden gelijk",
+    "north": "Noord",
+    "east": "Oost",
+    "south": "Zuid",
+    "west": "West",
+    "systemLoss": "Systeemverliezen",
+    "calculate": "Bereken opbrengst",
+    "calculating": "Berekenen...",
+    "wpTooltip": "Voer het piekvermogen in Wattpiek (Wp) in per zijde van de kolom"
+  },
+  "results": {
+    "title": "Resultaten",
+    "yearlyTotal": "Totale jaaropbrengst",
+    "bestMonth": "Beste maand",
+    "worstMonth": "Slechtste maand",
+    "avgDaily": "Gem. dagopbrengst",
+    "whPerDay": "Wh/dag",
+    "kwhPerYear": "kWh/jaar",
+    "kwhPerMonth": "kWh/mnd",
+    "monthlyChart": "Maandelijkse opbrengst",
+    "dailyAvg": "Dagelijks gemiddelde (Wh)",
+    "monthlyTotal": "Maandtotaal (kWh)",
+    "detailTable": "Gedetailleerd overzicht",
+    "month": "Maand",
+    "total": "Totaal",
+    "yearAvg": "Jaargemiddelde",
+    "yearTotal": "Jaartotaal",
+    "exportPdf": "Exporteer als PDF",
+    "newCalculation": "Nieuwe berekening"
+  },
+  "loading": {
+    "calculating": "Berekening wordt uitgevoerd...",
+    "fetchSouth": "Ophalen data Zuid-zijde...",
+    "fetchEast": "Ophalen data Oost-zijde...",
+    "fetchWest": "Ophalen data West-zijde...",
+    "fetchNorth": "Ophalen data Noord-zijde...",
+    "combining": "Resultaten combineren..."
+  },
+  "errors": {
+    "pvgisUnavailable": "PVGIS is momenteel niet beschikbaar. Probeer het later opnieuw.",
+    "locationOutOfRange": "Deze locatie valt buiten het PVGIS-dekkingsgebied.",
+    "genericError": "Er is een fout opgetreden. Probeer het opnieuw.",
+    "fillLocation": "Selecteer eerst een locatie op de kaart",
+    "fillWp": "Vul het vermogen per zijde in (minimaal 1 zijde > 0 Wp)"
+  },
+  "footer": {
+    "disclaimer": "De berekeningen zijn gebaseerd op historische data van PVGIS (Photovoltaic Geographical Information System), ontwikkeld door het Joint Research Centre van de Europese Commissie. Werkelijke opbrengst kan afwijken door lokale omstandigheden zoals beschaduwing, vervuiling, temperatuur en degradatie van panelen. Deze tool is bedoeld als indicatie voor projectvoorbereiding.",
+    "copyright": "© 2026 SPIRIT solar power supply — spiritsolarlighting.com"
+  },
+  "months": {
+    "1": "Jan",
+    "2": "Feb",
+    "3": "Mrt",
+    "4": "Apr",
+    "5": "Mei",
+    "6": "Jun",
+    "7": "Jul",
+    "8": "Aug",
+    "9": "Sep",
+    "10": "Okt",
+    "11": "Nov",
+    "12": "Dec"
+  },
+  "monthsFull": {
+    "1": "Januari",
+    "2": "Februari",
+    "3": "Maart",
+    "4": "April",
+    "5": "Mei",
+    "6": "Juni",
+    "7": "Juli",
+    "8": "Augustus",
+    "9": "September",
+    "10": "Oktober",
+    "11": "November",
+    "12": "December"
+  }
+}

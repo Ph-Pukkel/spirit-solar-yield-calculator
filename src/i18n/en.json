@@ -1,0 +1,101 @@
+{
+  "app": {
+    "title": "Solar Yield Calculator",
+    "subtitle": "Calculate the yield of your vertical solar panels"
+  },
+  "header": {
+    "language": "NL"
+  },
+  "location": {
+    "title": "Select location",
+    "searchPlaceholder": "Search for a location...",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locationName": "Location",
+    "clickMap": "Click on the map to select a location",
+    "polarWarning": "Note: at latitudes above 66°, results have limited reliability due to polar night scenarios."
+  },
+  "config": {
+    "title": "Panel configuration",
+    "preset": "Preset",
+    "selectPreset": "Select a preset...",
+    "manualInput": "Manual input",
+    "wpPerSide": "Wp per side",
+    "allSidesEqual": "All sides equal",
+    "north": "North",
+    "east": "East",
+    "south": "South",
+    "west": "West",
+    "systemLoss": "System losses",
+    "calculate": "Calculate yield",
+    "calculating": "Calculating...",
+    "wpTooltip": "Enter the peak power in Watt-peak (Wp) per side of the column"
+  },
+  "results": {
+    "title": "Results",
+    "yearlyTotal": "Total yearly yield",
+    "bestMonth": "Best month",
+    "worstMonth": "Worst month",
+    "avgDaily": "Avg. daily yield",
+    "whPerDay": "Wh/day",
+    "kwhPerYear": "kWh/year",
+    "kwhPerMonth": "kWh/month",
+    "monthlyChart": "Monthly yield",
+    "dailyAvg": "Daily average (Wh)",
+    "monthlyTotal": "Monthly total (kWh)",
+    "detailTable": "Detailed overview",
+    "month": "Month",
+    "total": "Total",
+    "yearAvg": "Year average",
+    "yearTotal": "Year total",
+    "exportPdf": "Export as PDF",
+    "newCalculation": "New calculation"
+  },
+  "loading": {
+    "calculating": "Calculation in progress...",
+    "fetchSouth": "Fetching South side data...",
+    "fetchEast": "Fetching East side data...",
+    "fetchWest": "Fetching West side data...",
+    "fetchNorth": "Fetching North side data...",
+    "combining": "Combining results..."
+  },
+  "errors": {
+    "pvgisUnavailable": "PVGIS is currently unavailable. Please try again later.",
+    "locationOutOfRange": "This location is outside the PVGIS coverage area.",
+    "genericError": "An error occurred. Please try again.",
+    "fillLocation": "Please select a location on the map first",
+    "fillWp": "Please enter power per side (at least 1 side > 0 Wp)"
+  },
+  "footer": {
+    "disclaimer": "Calculations are based on historical data from PVGIS (Photovoltaic Geographical Information System), developed by the Joint Research Centre of the European Commission. Actual yield may differ due to local conditions such as shading, soiling, temperature and panel degradation. This tool is intended as an indication for project preparation.",
+    "copyright": "© 2026 SPIRIT solar power supply — spiritsolarlighting.com"
+  },
+  "months": {
+    "1": "Jan",
+    "2": "Feb",
+    "3": "Mar",
+    "4": "Apr",
+    "5": "May",
+    "6": "Jun",
+    "7": "Jul",
+    "8": "Aug",
+    "9": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dec"
+  },
+  "monthsFull": {
+    "1": "January",
+    "2": "February",
+    "3": "March",
+    "4": "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December"
+  }
+}
