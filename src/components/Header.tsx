@@ -1,6 +1,7 @@
 'use client';
 
-import { Globe } from 'lucide-react';
+import { Globe, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import type { Locale } from '@/lib/types';
 import nl from '@/i18n/nl.json';
 import en from '@/i18n/en.json';
@@ -12,9 +13,15 @@ interface HeaderProps {
 
 export default function Header({ locale, onLocaleChange }: HeaderProps) {
   const t = locale === 'nl' ? nl : en;
+  const router = useRouter();
 
   const toggleLocale = () => {
     onLocaleChange(locale === 'nl' ? 'en' : 'nl');
+  };
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
   };
 
   return (
@@ -38,15 +45,25 @@ export default function Header({ locale, onLocaleChange }: HeaderProps) {
             </div>
           </div>
 
-          {/* Language toggle */}
-          <button
-            onClick={toggleLocale}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-200 hover:bg-spirit-green/20 hover:border-spirit-green/40 transition-colors text-sm font-medium cursor-pointer"
-            aria-label={`Switch language to ${locale === 'nl' ? 'English' : 'Nederlands'}`}
-          >
-            <Globe className="w-4 h-4" />
-            {t.header.language}
-          </button>
+          {/* Language toggle and logout */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleLocale}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-200 hover:bg-spirit-cinnabar/20 hover:border-spirit-cinnabar/40 transition-colors text-sm font-medium cursor-pointer"
+              aria-label={`Switch language to ${locale === 'nl' ? 'English' : 'Nederlands'}`}
+            >
+              <Globe className="w-4 h-4" />
+              {t.header.language}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center p-1.5 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-400 hover:text-red-400 hover:border-red-400/40 transition-colors cursor-pointer"
+              aria-label="Uitloggen"
+              title="Uitloggen"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 

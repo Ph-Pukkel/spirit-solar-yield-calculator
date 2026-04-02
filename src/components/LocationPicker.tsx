@@ -68,7 +68,7 @@ export default function LocationPicker({
             value={latitude !== null ? latitude : ''}
             onChange={handleLatChange}
             placeholder="51.5074"
-            className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#7ab648] transition-colors"
+            className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#E14C2A] transition-colors"
           />
         </div>
         <div>
@@ -79,7 +79,7 @@ export default function LocationPicker({
             value={longitude !== null ? longitude : ''}
             onChange={handleLonChange}
             placeholder="10.0000"
-            className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#7ab648] transition-colors"
+            className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#E14C2A] transition-colors"
           />
         </div>
       </div>

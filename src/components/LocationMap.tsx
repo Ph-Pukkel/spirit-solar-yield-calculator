@@ -124,7 +124,7 @@ export default function LocationMap({ latitude, longitude, searchPlaceholder, on
           value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
           placeholder={searchPlaceholder}
-          className="w-full px-4 py-2.5 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#9ca3af] focus:outline-none focus:border-[#7ab648] transition-colors"
+          className="w-full px-4 py-2.5 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#9ca3af] focus:outline-none focus:border-[#E14C2A] transition-colors"
         />
         {/* Search icon */}
         <svg

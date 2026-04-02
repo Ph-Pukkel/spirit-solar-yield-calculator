@@ -27,7 +27,7 @@ export default function Footer({ locale }: FooterProps) {
             href="https://spiritsolarlighting.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-spirit-green hover:text-spirit-green-light transition-colors"
+            className="flex items-center gap-1.5 text-xs text-spirit-cinnabar hover:text-spirit-cinnabar-light transition-colors"
           >
             spiritsolarlighting.com
             <ExternalLink className="w-3 h-3" />

@@ -1,14 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  /* Primary colors */
-  --spirit-black: #1a1a1a;
-  --spirit-dark: #2d2d2d;
-  --spirit-green: #7ab648;
-  --spirit-green-light: #8ec95c;
-  --spirit-green-dark: #5a8f35;
+  /* SPIRIT brand colors */
+  --spirit-cinnabar: #E14C2A;
+  --spirit-cinnabar-light: #E8633F;
+  --spirit-burnt-umber: #993624;
+  --spirit-red: #BC3D21;
 
-  /* Neutral colors */
+  /* Dark palette */
+  --spirit-black: #1A1B1A;
+  --spirit-black-two: #121212;
+  --spirit-nero: #272727;
+  --spirit-dark: #2d2d2d;
+  --spirit-eclipse: #3E3D3D;
+  --spirit-heavy-metal: #3D3D3C;
+  --spirit-matterhorn: #4E4E4E;
+
+  /* Neutral / light palette */
+  --spirit-dim-gray: #707070;
+  --spirit-foggy-gray: #A5A5A4;
+  --spirit-gallery: #D7D3CD;
+  --spirit-desert-storm: #EDEAE5;
+  --spirit-pampas: #E8E4DE;
+  --spirit-wild-sand: #E6E4DF;
+  --spirit-smoke: #EFEFEF;
+  --spirit-whisper: #EDEDED;
+  --spirit-mercury: #E5E5E5;
+
+  /* Accent extras */
+  --spirit-bismark: #4E747D;
+  --spirit-sapphire: #001154;
+  --spirit-seal-brown: #3B1D1C;
+
+  /* Mapped neutral aliases */
   --spirit-white: #ffffff;
   --spirit-gray-100: #f5f5f5;
   --spirit-gray-200: #e5e5e5;
@@ -16,7 +40,7 @@
   --spirit-gray-600: #4b5563;
   --spirit-gray-800: #1f2937;
 
-  /* Direction colors (for charts) */
+  /* Direction colors (for charts — NOT brand) */
   --color-south: #f59e0b;
   --color-east: #3b82f6;
   --color-west: #ef4444;
@@ -31,31 +55,36 @@
   --color-foreground: var(--foreground);
   --color-spirit-black: var(--spirit-black);
   --color-spirit-dark: var(--spirit-dark);
-  --color-spirit-green: var(--spirit-green);
-  --color-spirit-green-light: var(--spirit-green-light);
-  --color-spirit-green-dark: var(--spirit-green-dark);
+  --color-spirit-nero: var(--spirit-nero);
+  --color-spirit-eclipse: var(--spirit-eclipse);
+  --color-spirit-cinnabar: var(--spirit-cinnabar);
+  --color-spirit-cinnabar-light: var(--spirit-cinnabar-light);
+  --color-spirit-burnt-umber: var(--spirit-burnt-umber);
+  --color-spirit-red: var(--spirit-red);
   --color-spirit-white: var(--spirit-white);
   --color-spirit-gray-100: var(--spirit-gray-100);
   --color-spirit-gray-200: var(--spirit-gray-200);
   --color-spirit-gray-400: var(--spirit-gray-400);
   --color-spirit-gray-600: var(--spirit-gray-600);
   --color-spirit-gray-800: var(--spirit-gray-800);
+  --color-spirit-foggy-gray: var(--spirit-foggy-gray);
+  --color-spirit-dim-gray: var(--spirit-dim-gray);
   --color-direction-south: var(--color-south);
   --color-direction-east: var(--color-east);
   --color-direction-west: var(--color-west);
   --color-direction-north: var(--color-north);
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Open Sans', system-ui, -apple-system, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
 }
 
 /* Glassmorphism card effect */
 .glass-card {
-  background: rgba(45, 45, 45, 0.7);
+  background: rgba(39, 39, 39, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -64,28 +93,28 @@ body {
 
 /* Leaflet overrides for dark theme */
 .leaflet-container {
-  background: #1a1a1a;
+  background: #1A1B1A;
   border-radius: 12px;
 }
 
 .leaflet-control-zoom a {
-  background: #2d2d2d !important;
+  background: #272727 !important;
   color: #fff !important;
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 .leaflet-control-zoom a:hover {
-  background: #3d3d3d !important;
+  background: #3E3D3D !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #2d2d2d;
+  background: #272727;
   color: #fff;
   border-radius: 8px;
 }
 
 .leaflet-popup-tip {
-  background: #2d2d2d;
+  background: #272727;
 }
 
 /* Custom scrollbar */
@@ -95,16 +124,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: #1A1B1A;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: #4E4E4E;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  background: #707070;
 }
 
 /* Number input hide spinners */
@@ -120,20 +149,20 @@ input[type="number"] {
 
 /* Search bar styling for leaflet geocoder */
 .leaflet-control-geocoder {
-  background: #2d2d2d !important;
+  background: #272727 !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 8px !important;
 }
 
 .leaflet-control-geocoder input {
-  background: #2d2d2d !important;
+  background: #272727 !important;
   color: #fff !important;
 }
 
 .leaflet-control-geocoder .leaflet-control-geocoder-alternatives {
-  background: #2d2d2d !important;
+  background: #272727 !important;
 }
 
 .leaflet-control-geocoder .leaflet-control-geocoder-alternatives li:hover {
-  background: #3d3d3d !important;
+  background: #3E3D3D !important;
 }

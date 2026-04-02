@@ -23,7 +23,7 @@ export default function SummaryCards({ result, locale }: SummaryCardsProps) {
 
   const cards: CardData[] = [
     {
-      icon: <Sun className="w-6 h-6 text-spirit-green" />,
+      icon: <Sun className="w-6 h-6 text-spirit-cinnabar" />,
       label: t.results.yearlyTotal,
       value: formatNumber(result.totals.yearly_kwh, 1, locale),
       unit: t.results.kwhPerYear,

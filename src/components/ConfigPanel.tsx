@@ -89,7 +89,7 @@ export default function ConfigPanel({
         <select
           value={selectedPresetId}
           onChange={handlePresetChange}
-          className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white focus:outline-none focus:border-[#7ab648] transition-colors appearance-none cursor-pointer"
+          className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white focus:outline-none focus:border-[#E14C2A] transition-colors appearance-none cursor-pointer"
         >
           <option value="">{t.config.selectPreset}</option>
           {presets.map((preset) => (
@@ -108,7 +108,7 @@ export default function ConfigPanel({
           aria-checked={allSidesEqual}
           onClick={() => setAllSidesEqual(!allSidesEqual)}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-            allSidesEqual ? 'bg-[#7ab648]' : 'bg-[#4b5563]'
+            allSidesEqual ? 'bg-[#E14C2A]' : 'bg-[#4b5563]'
           }`}
         >
           <span
@@ -130,7 +130,7 @@ export default function ConfigPanel({
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
               onClick={() => setShowTooltip(!showTooltip)}
-              className="w-5 h-5 rounded-full bg-[#4b5563] text-white text-xs flex items-center justify-center hover:bg-[#7ab648] transition-colors"
+              className="w-5 h-5 rounded-full bg-[#4b5563] text-white text-xs flex items-center justify-center hover:bg-[#E14C2A] transition-colors"
             >
               ?
             </button>
@@ -150,7 +150,7 @@ export default function ConfigPanel({
               value={wpAll || ''}
               onChange={(e) => setWpAll(Math.max(0, parseInt(e.target.value) || 0))}
               placeholder="0"
-              className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#7ab648] transition-colors"
+              className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#E14C2A] transition-colors"
             />
             <span className="text-xs text-[#9ca3af] mt-1 block">Wp ({t.config.allSidesEqual})</span>
           </div>
@@ -172,7 +172,7 @@ export default function ConfigPanel({
                   value={value || ''}
                   onChange={(e) => setter(Math.max(0, parseInt(e.target.value) || 0))}
                   placeholder="0"
-                  className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#7ab648] transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-[#2d2d2d] border border-white/10 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#E14C2A] transition-colors"
                 />
               </div>
             ))}
@@ -191,7 +191,7 @@ export default function ConfigPanel({
                 onMouseEnter={() => setShowLossTooltip(true)}
                 onMouseLeave={() => setShowLossTooltip(false)}
                 onClick={() => setShowLossTooltip(!showLossTooltip)}
-                className="w-5 h-5 rounded-full bg-[#4b5563] text-white text-xs flex items-center justify-center hover:bg-[#7ab648] transition-colors"
+                className="w-5 h-5 rounded-full bg-[#4b5563] text-white text-xs flex items-center justify-center hover:bg-[#E14C2A] transition-colors"
               >
                 ?
               </button>
@@ -213,7 +213,7 @@ export default function ConfigPanel({
           onChange={(e) => setLoss(parseInt(e.target.value))}
           className="w-full h-2 rounded-lg appearance-none cursor-pointer"
           style={{
-            background: `linear-gradient(to right, #7ab648 0%, #7ab648 ${(loss / 30) * 100}%, #4b5563 ${(loss / 30) * 100}%, #4b5563 100%)`,
+            background: `linear-gradient(to right, #E14C2A 0%, #E14C2A ${(loss / 30) * 100}%, #4b5563 ${(loss / 30) * 100}%, #4b5563 100%)`,
           }}
         />
         <div className="flex justify-between text-xs text-[#4b5563] mt-1">
@@ -230,7 +230,7 @@ export default function ConfigPanel({
         className={`w-full py-3 rounded-lg text-white font-semibold text-base transition-all duration-200 ${
           isDisabled
             ? 'bg-[#4b5563] cursor-not-allowed opacity-50'
-            : 'bg-[#7ab648] hover:bg-[#8ec95c] active:bg-[#5a8f35] cursor-pointer shadow-lg shadow-[#7ab648]/20'
+            : 'bg-[#E14C2A] hover:bg-[#993624] active:bg-[#BC3D21] cursor-pointer shadow-lg shadow-[#E14C2A]/20'
         }`}
       >
         {isCalculating ? t.config.calculating : t.config.calculate}

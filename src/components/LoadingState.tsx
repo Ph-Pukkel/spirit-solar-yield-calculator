@@ -42,7 +42,7 @@ export default function LoadingState({ step, locale }: LoadingStateProps) {
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  stroke="#7ab648"
+                  stroke="#E14C2A"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   opacity={0.5 + (i % 3) * 0.15}
@@ -62,7 +62,7 @@ export default function LoadingState({ step, locale }: LoadingStateProps) {
               cx="40"
               cy="40"
               r="16"
-              fill="#7ab648"
+              fill="#E14C2A"
               className="animate-pulse"
             />
             <circle
@@ -70,7 +70,7 @@ export default function LoadingState({ step, locale }: LoadingStateProps) {
               cy="40"
               r="16"
               fill="none"
-              stroke="#8ec95c"
+              stroke="#E8633F"
               strokeWidth="2"
               opacity="0.4"
               className="animate-ping"
@@ -83,7 +83,7 @@ export default function LoadingState({ step, locale }: LoadingStateProps) {
           <p className="text-spirit-white font-medium text-lg">
             {t.loading.calculating}
           </p>
-          <p className="text-spirit-green text-sm animate-pulse">
+          <p className="text-spirit-cinnabar text-sm animate-pulse">
             {stepText}
           </p>
         </div>

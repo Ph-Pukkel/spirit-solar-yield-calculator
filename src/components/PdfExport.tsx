@@ -37,7 +37,7 @@ export default function PdfExport({ result, locale }: PdfExportProps) {
       let y = 0;
 
       // Header bar
-      doc.setFillColor(90, 143, 53); // spirit-green-dark
+      doc.setFillColor(26, 27, 26); // spirit-black
       doc.rect(0, 0, pageWidth, 28, 'F');
 
       // Logo text (since loading external images can fail)
@@ -71,7 +71,7 @@ export default function PdfExport({ result, locale }: PdfExportProps) {
       y += 10;
 
       // Summary section
-      doc.setFillColor(122, 182, 72); // spirit-green
+      doc.setFillColor(225, 76, 42); // spirit-cinnabar
       doc.rect(margin, y, contentWidth, 8, 'F');
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(12);
@@ -175,7 +175,7 @@ export default function PdfExport({ result, locale }: PdfExportProps) {
       });
 
       // Total row
-      doc.setFillColor(122, 182, 72);
+      doc.setFillColor(225, 76, 42);
       doc.rect(margin, y - 3, contentWidth, 7, 'F');
       doc.setTextColor(255, 255, 255);
       doc.setFont('helvetica', 'bold');
@@ -241,7 +241,7 @@ export default function PdfExport({ result, locale }: PdfExportProps) {
     <button
       onClick={handleExport}
       disabled={loading}
-      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-spirit-green hover:bg-spirit-green-light disabled:opacity-50 text-white font-medium transition-colors cursor-pointer"
+      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-spirit-cinnabar hover:bg-spirit-burnt-umber disabled:opacity-50 text-white font-medium transition-colors cursor-pointer"
     >
       {loading ? (
         <Loader2 className="w-4 h-4 animate-spin" />

@@ -153,7 +153,7 @@ export default function AdminPage() {
       <div className="min-h-screen flex items-center justify-center p-8">
         <div className="glass-card p-8 max-w-md text-center">
           <p className="text-spirit-gray-200">{a.noSupabase || 'Supabase is not configured.'}</p>
-          <a href="/" className="mt-4 inline-block text-spirit-green hover:underline">
+          <a href="/" className="mt-4 inline-block text-spirit-cinnabar hover:underline">
             {a.backToCalculator || 'Back to calculator'}
           </a>
         </div>
@@ -170,7 +170,7 @@ export default function AdminPage() {
             <div className="flex items-center gap-4">
               <a
                 href="/"
-                className="flex items-center gap-2 text-spirit-gray-400 hover:text-spirit-green transition-colors text-sm"
+                className="flex items-center gap-2 text-spirit-gray-400 hover:text-spirit-cinnabar transition-colors text-sm"
               >
                 <ArrowLeft className="w-4 h-4" />
                 {a.backToCalculator || 'Back to calculator'}
@@ -178,7 +178,7 @@ export default function AdminPage() {
             </div>
             <button
               onClick={toggleLocale}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-200 hover:bg-spirit-green/20 hover:border-spirit-green/40 transition-colors text-sm font-medium cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-200 hover:bg-spirit-cinnabar/20 hover:border-spirit-cinnabar/40 transition-colors text-sm font-medium cursor-pointer"
             >
               <Globe className="w-4 h-4" />
               {t.header?.language || 'EN'}
@@ -204,7 +204,7 @@ export default function AdminPage() {
           {!showAddForm && (
             <button
               onClick={() => { setShowAddForm(true); setEditingId(null); setForm(emptyForm); }}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-spirit-green text-white font-medium hover:bg-spirit-green-light transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-spirit-cinnabar text-white font-medium hover:bg-spirit-cinnabar-light transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               {a.addPreset || 'Add Preset'}
@@ -217,7 +217,7 @@ export default function AdminPage() {
           <div
             className={`mb-4 px-4 py-3 rounded-lg text-sm font-medium ${
               message.type === 'success'
-                ? 'bg-spirit-green/20 text-spirit-green border border-spirit-green/30'
+                ? 'bg-spirit-cinnabar/20 text-spirit-cinnabar border border-spirit-cinnabar/30'
                 : 'bg-red-500/20 text-red-400 border border-red-500/30'
             }`}
           >
@@ -241,7 +241,7 @@ export default function AdminPage() {
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-green/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
                 />
               </div>
 
@@ -254,7 +254,7 @@ export default function AdminPage() {
                   type="number"
                   value={form.wp_per_side}
                   onChange={(e) => setForm({ ...form, wp_per_side: Number(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-green/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
                 />
               </div>
 
@@ -266,7 +266,7 @@ export default function AdminPage() {
                 <select
                   value={form.technology}
                   onChange={(e) => setForm({ ...form, technology: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-green/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
                 >
                   <option value="crystSi">crystSi</option>
                   <option value="CIS">CIS</option>
@@ -283,7 +283,7 @@ export default function AdminPage() {
                   type="number"
                   value={form.system_loss}
                   onChange={(e) => setForm({ ...form, system_loss: Number(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-green/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
                 />
               </div>
 
@@ -296,7 +296,7 @@ export default function AdminPage() {
                   type="text"
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-green/50 transition-colors"
+                  className="w-full px-3 py-2 rounded-lg bg-spirit-black border border-white/10 text-spirit-white focus:outline-none focus:border-spirit-cinnabar/50 transition-colors"
                 />
               </div>
 
@@ -307,7 +307,7 @@ export default function AdminPage() {
                     type="checkbox"
                     checked={form.is_default}
                     onChange={(e) => setForm({ ...form, is_default: e.target.checked })}
-                    className="w-4 h-4 rounded accent-spirit-green"
+                    className="w-4 h-4 rounded accent-spirit-cinnabar"
                   />
                   {a.isDefault || 'Default preset'}
                 </label>
@@ -319,7 +319,7 @@ export default function AdminPage() {
               <button
                 onClick={handleSave}
                 disabled={!form.name.trim()}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-spirit-green text-white font-medium hover:bg-spirit-green-light transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-spirit-cinnabar text-white font-medium hover:bg-spirit-cinnabar-light transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Check className="w-4 h-4" />
                 {a.save || 'Save'}
@@ -368,7 +368,7 @@ export default function AdminPage() {
                       <td className="px-4 py-3 text-spirit-gray-200">{preset.system_loss}%</td>
                       <td className="px-4 py-3">
                         {preset.is_default && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-spirit-green/20 text-spirit-green">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-spirit-cinnabar/20 text-spirit-cinnabar">
                             <Check className="w-3 h-3 mr-1" />
                             {locale === 'nl' ? 'Ja' : 'Yes'}
                           </span>
@@ -378,7 +378,7 @@ export default function AdminPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleEdit(preset)}
-                            className="p-1.5 rounded-lg text-spirit-gray-400 hover:text-spirit-green hover:bg-spirit-green/10 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-spirit-gray-400 hover:text-spirit-cinnabar hover:bg-spirit-cinnabar/10 transition-colors cursor-pointer"
                             title={a.editPreset || 'Edit'}
                           >
                             <Pencil className="w-4 h-4" />

@@ -53,13 +53,13 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
                   </span>
                 </th>
               ))}
-              <th className="text-right py-3 px-3 text-spirit-green font-medium">
+              <th className="text-right py-3 px-3 text-spirit-cinnabar font-medium">
                 {t.results.total}
                 <span className="block text-xs font-normal opacity-70">
                   ({t.results.whPerDay})
                 </span>
               </th>
-              <th className="text-right py-3 px-3 text-spirit-green font-medium">
+              <th className="text-right py-3 px-3 text-spirit-cinnabar font-medium">
                 {t.results.total}
                 <span className="block text-xs font-normal opacity-70">
                   ({t.results.kwhPerMonth})
@@ -100,8 +100,8 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t-2 border-spirit-green/30 bg-spirit-green/5">
-              <td className="py-3 px-3 text-spirit-green font-bold">
+            <tr className="border-t-2 border-spirit-cinnabar/30 bg-spirit-cinnabar/5">
+              <td className="py-3 px-3 text-spirit-cinnabar font-bold">
                 {t.results.yearAvg} / {t.results.yearTotal}
               </td>
               <td className="py-3 px-3 text-right text-spirit-gray-200 font-semibold">
@@ -119,7 +119,7 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
               <td className="py-3 px-3 text-right text-spirit-white font-bold">
                 {formatNumber(yearAvgTotal, 0, locale)}
               </td>
-              <td className="py-3 px-3 text-right text-spirit-green font-bold">
+              <td className="py-3 px-3 text-right text-spirit-cinnabar font-bold">
                 {formatNumber(yearTotalKwh, 1, locale)}
               </td>
             </tr>

@@ -70,7 +70,7 @@ function CustomTooltip({ active, payload, label, locale, mode }: CustomTooltipPr
       ))}
       <div className="border-t border-white/10 mt-2 pt-2 flex items-center justify-between text-sm">
         <span className="text-spirit-gray-400">{t.results.total}</span>
-        <span className="text-spirit-green font-bold">
+        <span className="text-spirit-cinnabar font-bold">
           {formatNumber(total, mode === 'daily' ? 0 : 1, locale)} {unit}
         </span>
       </div>
@@ -127,7 +127,7 @@ export default function MonthlyChart({ data, locale }: MonthlyChartProps) {
             onClick={() => setMode('daily')}
             className={`px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
               mode === 'daily'
-                ? 'bg-spirit-green text-white'
+                ? 'bg-spirit-cinnabar text-white'
                 : 'bg-spirit-dark text-spirit-gray-400 hover:text-spirit-white'
             }`}
           >
@@ -137,7 +137,7 @@ export default function MonthlyChart({ data, locale }: MonthlyChartProps) {
             onClick={() => setMode('monthly')}
             className={`px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
               mode === 'monthly'
-                ? 'bg-spirit-green text-white'
+                ? 'bg-spirit-cinnabar text-white'
                 : 'bg-spirit-dark text-spirit-gray-400 hover:text-spirit-white'
             }`}
           >
