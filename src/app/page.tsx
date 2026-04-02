@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import type { Locale, PanelConfig } from '@/lib/types';
 import { useCalculation } from '@/hooks/useCalculation';
 import { usePanelPresets } from '@/hooks/usePanelPresets';
+import { usePageTracking } from '@/hooks/usePageTracking';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import LocationPicker from '@/components/LocationPicker';
@@ -12,6 +13,7 @@ import ResultsDashboard from '@/components/ResultsDashboard';
 import LoadingState from '@/components/LoadingState';
 
 export default function Home() {
+  usePageTracking();
   const [locale, setLocale] = useState<Locale>('nl');
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);

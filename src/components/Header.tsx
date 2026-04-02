@@ -1,6 +1,7 @@
 'use client';
 
-import { Globe, LogOut } from 'lucide-react';
+import { Globe, LogOut, Settings } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { Locale } from '@/lib/types';
 import nl from '@/i18n/nl.json';
@@ -45,7 +46,7 @@ export default function Header({ locale, onLocaleChange }: HeaderProps) {
             </div>
           </div>
 
-          {/* Language toggle and logout */}
+          {/* Language toggle, admin and logout */}
           <div className="flex items-center gap-2">
             <button
               onClick={toggleLocale}
@@ -55,6 +56,14 @@ export default function Header({ locale, onLocaleChange }: HeaderProps) {
               <Globe className="w-4 h-4" />
               {t.header.language}
             </button>
+            <Link
+              href="/admin"
+              className="flex items-center justify-center p-1.5 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-400 hover:text-spirit-cinnabar hover:border-spirit-cinnabar/40 transition-colors"
+              aria-label="Beheer"
+              title="Beheer"
+            >
+              <Settings className="w-4 h-4" />
+            </Link>
             <button
               onClick={handleLogout}
               className="flex items-center justify-center p-1.5 rounded-lg bg-spirit-dark border border-white/10 text-spirit-gray-400 hover:text-red-400 hover:border-red-400/40 transition-colors cursor-pointer"
