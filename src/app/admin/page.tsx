@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Globe, ArrowLeft, Plus, Pencil, Trash2, Check, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import CalculationsPanel from '@/components/CalculationsPanel';
 import type { PanelPreset, Locale } from '@/lib/types';
 import nl from '@/i18n/nl.json';
 import en from '@/i18n/en.json';
@@ -398,6 +399,14 @@ export default function AdminPage() {
               </table>
             </div>
           )}
+        </div>
+
+        {/* Calculations & formulas */}
+        <div className="mt-10">
+          <h2 className="text-xl font-semibold text-[#1A1B1A] mb-4">
+            Berekeningen &amp; formules
+          </h2>
+          <CalculationsPanel />
         </div>
       </main>
     </div>

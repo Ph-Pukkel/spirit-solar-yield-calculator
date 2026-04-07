@@ -60,7 +60,9 @@ export function combineResults(
 
   // Calculate totals
   const yearly_kwh = monthly.reduce((sum, m) => sum + m.total_kwh_month, 0);
-  const avg_daily_wh = monthly.reduce((sum, m) => sum + m.total_wh_day, 0) / 12;
+  // True yearly average daily yield: total kWh × 1000 / 365.25 days.
+  // (Mean of monthly averages would over-weight short months.)
+  const avg_daily_wh = (yearly_kwh * 1000) / 365.25;
 
   const bestMonth = monthly.reduce((best, m) =>
     m.total_wh_day > best.total_wh_day ? m : best

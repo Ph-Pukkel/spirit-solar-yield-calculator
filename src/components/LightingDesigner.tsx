@@ -48,6 +48,7 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
 
   const [open, setOpen] = useState(false);
   const [batteryAh, setBatteryAh] = useState(100);
+  const [batteryV, setBatteryV] = useState(48);
   const [dod, setDod] = useState(40);
   const [dcEff, setDcEff] = useState(94);
   const [lightW, setLightW] = useState(25);
@@ -60,7 +61,7 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
   const computed = useMemo(() => {
     const dodFrac = dod / 100;
     const effFrac = dcEff / 100;
-    const usableWh = batteryAh * 48 * dodFrac * effFrac;
+    const usableWh = batteryAh * batteryV * dodFrac * effFrac;
     const usablePerNight = autonomy > 0 ? usableWh / autonomy : usableWh;
     const safeLightW = Math.max(lightW, 0.0001);
 
@@ -101,7 +102,7 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
     }
 
     return { rows, worst, usableWh };
-  }, [batteryAh, dod, dcEff, lightW, autonomy, lat, result.monthly, months, mode]);
+  }, [batteryAh, batteryV, dod, dcEff, lightW, autonomy, lat, result.monthly, months, mode]);
 
   const worstCoveragePct = Math.round(computed.worst.coverage * 100);
   const fullCoverage = computed.rows.every((r) => r.burnHours >= r.nightHours - 0.05);
@@ -203,6 +204,29 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                 {locale === 'nl' ? 'Eigen waarde…' : 'Custom value…'}
               </option>
             </select>
+          </div>
+
+          {/* Battery system voltage toggle */}
+          <div>
+            <span className="block text-xs text-[#707070] mb-1">
+              {locale === 'nl' ? 'Systeemspanning' : 'System voltage'}
+            </span>
+            <div className="inline-flex rounded-lg border border-[#D7D3CD] bg-white overflow-hidden">
+              {[24, 48].map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setBatteryV(v)}
+                  className={`px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${
+                    batteryV === v
+                      ? 'bg-[#E14C2A] text-white'
+                      : 'text-[#1A1B1A] hover:bg-[#F0EDE8]'
+                  }`}
+                >
+                  {v} V
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Inputs */}
