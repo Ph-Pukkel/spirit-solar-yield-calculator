@@ -118,8 +118,8 @@ export default function VraagDennis() {
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full shadow-lg text-white font-semibold text-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
         style={{ backgroundColor: '#E14C2A', visibility: hiddenForCapture ? 'hidden' : 'visible' }}
       >
-        <MessageCircle className="w-5 h-5 flex-shrink-0" />
         <span>Vraag Dennis</span>
+        <span className="text-xl leading-none" aria-hidden>🦖</span>
       </button>
 
       {/* Annotator overlay (above modal so it gets full screen) */}
