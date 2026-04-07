@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Spirit Solar Yield Calculator",
-    "subtitle": "Bereken de opbrengst van uw verticale zonnepanelen"
+    "subtitle": "Zonlicht geeft ons kracht — bereken licht in de nacht, zonder netaansluiting"
   },
   "header": {
     "language": "EN"
@@ -30,7 +30,7 @@
     "calculate": "Bereken opbrengst",
     "calculating": "Berekenen...",
     "wpTooltip": "Voer het piekvermogen in Wattpiek (Wp) in per zijde van de kolom",
-    "lossTooltip": "Systeemverliezen omvatten kabelverliezen, omvormerefficiëntie, stof/vuil op panelen, temperatuureffecten en degradatie. Standaard 14% is een gangbare waarde voor de meeste installaties."
+    "lossTooltip": "Systeemverliezen omvatten kabelverliezen, omvormerefficiëntie, stof/vuil op panelen, temperatuureffecten en degradatie. Standaard 5% is een gangbare waarde voor de meeste installaties."
   },
   "results": {
     "title": "Resultaten",
@@ -38,6 +38,8 @@
     "bestMonth": "Beste maand",
     "worstMonth": "Slechtste maand",
     "avgDaily": "Gem. dagopbrengst",
+    "avgNightPower": "Gem. vermogen 's nachts",
+    "watts": "W",
     "whPerDay": "Wh/dag",
     "kwhPerYear": "kWh/jaar",
     "kwhPerMonth": "kWh/mnd",
@@ -98,6 +100,43 @@
     "10": "Oktober",
     "11": "November",
     "12": "December"
+  },
+  "lighting": {
+    "title": "Geavanceerd: Verlichtingsontwerp",
+    "intro": "Bereken hoe lang een 48V-verlichtingssysteem per nacht kan branden op basis van de berekende opbrengst.",
+    "batteryAh": "Accucapaciteit (Ah @ 48V)",
+    "dod": "Ontladingsdiepte (DoD) %",
+    "dcEff": "DC-DC efficiëntie %",
+    "lightW": "Vermogen lichtbron (W)",
+    "autonomy": "Autonomiedagen",
+    "worstCase": "Slechtste maand",
+    "burnHours": "Brand-uren",
+    "nightHours": "Nachturen",
+    "month": "Maand",
+    "coverage": "Dekking",
+    "chartTitle": "Brand-uren vs nachturen per maand",
+    "recommendationOk": "Het systeem haalt in elke maand een volledige nacht verlichting.",
+    "recommendationDim": "In de slechtste maand wordt slechts {pct}% van de nacht gehaald. Overweeg dimmen tot ongeveer {pct}% lichtsterkte voor een volledige nacht dekking."
+  },
+  "vraagDennis": {
+    "buttonLabel": "Vraag Dennis",
+    "title": "Vraag Dennis",
+    "namePlaceholder": "Jouw naam...",
+    "nameLabel": "Naam",
+    "nameOptional": "(optioneel)",
+    "messageLabel": "Bericht",
+    "messagePlaceholder": "Wensen, problemen, ideeën...",
+    "screenshotButton": "Maak screenshot",
+    "screenshotCapturing": "Bezig met screenshot...",
+    "screenshotRemove": "Verwijderen",
+    "submitButton": "Stuur naar Dennis",
+    "submitting": "Verzenden...",
+    "cancelButton": "Annuleren",
+    "successTitle": "Verzonden! Dank je wel.",
+    "successBody": "Dennis neemt zo snel mogelijk contact op.",
+    "closeButton": "Sluiten",
+    "screenshotFailed": "Screenshot mislukt. Probeer het opnieuw.",
+    "sendFailed": "Verzenden mislukt"
   },
   "admin": {
     "title": "Paneelconfiguratie Beheer",

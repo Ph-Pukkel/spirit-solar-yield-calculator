@@ -9,6 +9,7 @@ import SummaryCards from '@/components/SummaryCards';
 import MonthlyChart from '@/components/MonthlyChart';
 import DetailTable from '@/components/DetailTable';
 import PdfExport from '@/components/PdfExport';
+import LightingDesigner from '@/components/LightingDesigner';
 
 interface ResultsDashboardProps {
   result: CalculationResult;
@@ -33,6 +34,8 @@ export default function ResultsDashboard({ result, locale, onReset }: ResultsDas
       <MonthlyChart data={result.monthly} locale={locale} />
 
       <DetailTable data={result.monthly} locale={locale} />
+
+      <LightingDesigner result={result} locale={locale} />
 
       <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
         <PdfExport result={result} locale={locale} />

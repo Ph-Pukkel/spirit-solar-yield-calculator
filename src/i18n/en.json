@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Spirit Solar Yield Calculator",
-    "subtitle": "Calculate the yield of your vertical solar panels"
+    "subtitle": "Sunlight empowers us — calculate light at night, without the grid"
   },
   "header": {
     "language": "NL"
@@ -30,7 +30,7 @@
     "calculate": "Calculate yield",
     "calculating": "Calculating...",
     "wpTooltip": "Enter the peak power in Watt-peak (Wp) per side of the column",
-    "lossTooltip": "System losses include cable losses, inverter efficiency, dust/soiling on panels, temperature effects and degradation. The default of 14% is a common value for most installations."
+    "lossTooltip": "System losses include cable losses, inverter efficiency, dust/soiling on panels, temperature effects and degradation. The default of 5% is a common value for most installations."
   },
   "results": {
     "title": "Results",
@@ -38,6 +38,8 @@
     "bestMonth": "Best month",
     "worstMonth": "Worst month",
     "avgDaily": "Avg. daily yield",
+    "avgNightPower": "Avg. power at night",
+    "watts": "W",
     "whPerDay": "Wh/day",
     "kwhPerYear": "kWh/year",
     "kwhPerMonth": "kWh/month",
@@ -98,6 +100,43 @@
     "10": "October",
     "11": "November",
     "12": "December"
+  },
+  "lighting": {
+    "title": "Advanced: Lighting Designer",
+    "intro": "Estimate how long a 48V lighting system can burn each night based on the calculated yield.",
+    "batteryAh": "Battery capacity (Ah @ 48V)",
+    "dod": "Depth of discharge (DoD) %",
+    "dcEff": "DC-DC efficiency %",
+    "lightW": "Light source power (W)",
+    "autonomy": "Autonomy days",
+    "worstCase": "Worst-case month",
+    "burnHours": "Burn hours",
+    "nightHours": "Night hours",
+    "month": "Month",
+    "coverage": "Coverage",
+    "chartTitle": "Burn hours vs night hours per month",
+    "recommendationOk": "The system achieves a full night of lighting in every month.",
+    "recommendationDim": "In the worst-case month only {pct}% of the night is covered. Consider dimming to about {pct}% brightness for full-night coverage."
+  },
+  "vraagDennis": {
+    "buttonLabel": "Ask Dennis",
+    "title": "Ask Dennis",
+    "namePlaceholder": "Your name...",
+    "nameLabel": "Name",
+    "nameOptional": "(optional)",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Wishes, problems, ideas...",
+    "screenshotButton": "Take screenshot",
+    "screenshotCapturing": "Taking screenshot...",
+    "screenshotRemove": "Remove",
+    "submitButton": "Send to Dennis",
+    "submitting": "Sending...",
+    "cancelButton": "Cancel",
+    "successTitle": "Sent! Thank you.",
+    "successBody": "Dennis will get back to you as soon as possible.",
+    "closeButton": "Close",
+    "screenshotFailed": "Screenshot failed. Please try again.",
+    "sendFailed": "Send failed"
   },
   "admin": {
     "title": "Panel Configuration Management",

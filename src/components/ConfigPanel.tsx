@@ -29,7 +29,7 @@ export default function ConfigPanel({
   const [wpEast, setWpEast] = useState(0);
   const [wpSouth, setWpSouth] = useState(0);
   const [wpWest, setWpWest] = useState(0);
-  const [loss, setLoss] = useState(14);
+  const [loss, setLoss] = useState(5);
   const [showTooltip, setShowTooltip] = useState(false);
   const [showLossTooltip, setShowLossTooltip] = useState(false);
 

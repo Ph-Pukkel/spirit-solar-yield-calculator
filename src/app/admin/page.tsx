@@ -21,7 +21,7 @@ const emptyForm: PresetFormData = {
   description: '',
   wp_per_side: 0,
   technology: 'crystSi',
-  system_loss: 14,
+  system_loss: 5,
   is_default: false,
 };
 
