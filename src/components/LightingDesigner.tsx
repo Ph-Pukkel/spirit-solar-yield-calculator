@@ -10,6 +10,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  LabelList,
   ResponsiveContainer,
 } from 'recharts';
 import type { CalculationResult, Locale } from '@/lib/types';
@@ -25,14 +26,16 @@ interface LightingDesignerProps {
 
 // SPIRIT / Sustainder luminaires used by SPIRIT solar columns.
 // Wattages from Sustainder product sheets (Anne and Alexia).
+// Verified against official Sustainder product sheets
+// (Anne EN v2401/v2201, Alexia EN v2401/v2201). Anne ships in two driver
+// power steps (25 W, 60 W). Alexia in four (25, 40, 60, 90 W).
 const SPIRIT_LIGHTS: { id: string; label: string; watts: number }[] = [
-  { id: 'anne-25', label: 'Sustainder Anne — 25 W (XS / pad)', watts: 25 },
-  { id: 'anne-60', label: 'Sustainder Anne — 60 W (XS+)', watts: 60 },
-  { id: 'alexia-5', label: 'Sustainder Alexia — 5 W (laag)', watts: 5 },
-  { id: 'alexia-20', label: 'Sustainder Alexia — 20 W', watts: 20 },
+  { id: 'anne-25', label: 'Sustainder Anne — 25 W', watts: 25 },
+  { id: 'anne-60', label: 'Sustainder Anne — 60 W', watts: 60 },
+  { id: 'alexia-25', label: 'Sustainder Alexia — 25 W', watts: 25 },
   { id: 'alexia-40', label: 'Sustainder Alexia — 40 W', watts: 40 },
   { id: 'alexia-60', label: 'Sustainder Alexia — 60 W', watts: 60 },
-  { id: 'alexia-90', label: 'Sustainder Alexia — 90 W (groot)', watts: 90 },
+  { id: 'alexia-90', label: 'Sustainder Alexia — 90 W', watts: 90 },
 ];
 const CUSTOM_LIGHT_ID = 'custom';
 
@@ -117,6 +120,7 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
           name: r.name,
           [locale === 'nl' ? 'Max vermogen (W)' : 'Max power (W)']: Number(r.maxW.toFixed(1)),
           [locale === 'nl' ? 'Lamp vol vermogen (W)' : 'Light full power (W)']: lightW,
+          pctLabel: `${Math.round(Math.min(100, r.dimPct))}%`,
         }));
 
   const handleLightChange = (id: string) => {
@@ -244,15 +248,10 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                     {locale === 'nl' ? 'Max vermogen' : 'Max power'}
                   </div>
                   <div className="text-lg font-semibold text-[#1A1B1A]">
-                    {formatNumber(computed.worst.maxW, 1, locale)} W
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs text-[#707070]">
-                    {locale === 'nl' ? 'Dimniveau' : 'Dim level'}
-                  </div>
-                  <div className="text-lg font-semibold text-[#E14C2A]">
-                    {Math.round(computed.worst.dimPct)}%
+                    {formatNumber(computed.worst.maxW, 1, locale)} W{' '}
+                    <span className="text-[#E14C2A]">
+                      ({Math.round(computed.worst.dimPct)}%)
+                    </span>
                   </div>
                 </div>
                 <div>
@@ -307,7 +306,13 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                       dataKey={locale === 'nl' ? 'Max vermogen (W)' : 'Max power (W)'}
                       fill="#E14C2A"
                       radius={[4, 4, 0, 0]}
-                    />
+                    >
+                      <LabelList
+                        dataKey="pctLabel"
+                        position="top"
+                        style={{ fill: '#E14C2A', fontSize: 11, fontWeight: 600 }}
+                      />
+                    </Bar>
                     <Bar
                       dataKey={locale === 'nl' ? 'Lamp vol vermogen (W)' : 'Light full power (W)'}
                       fill="#0ea5e9"
