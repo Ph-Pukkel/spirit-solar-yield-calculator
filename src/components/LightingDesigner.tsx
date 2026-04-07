@@ -23,6 +23,21 @@ interface LightingDesignerProps {
   locale: Locale;
 }
 
+// SPIRIT / Sustainder luminaires used by SPIRIT solar columns.
+// Wattages from Sustainder product sheets (Anne and Alexia).
+const SPIRIT_LIGHTS: { id: string; label: string; watts: number }[] = [
+  { id: 'anne-25', label: 'Sustainder Anne — 25 W (XS / pad)', watts: 25 },
+  { id: 'anne-60', label: 'Sustainder Anne — 60 W (XS+)', watts: 60 },
+  { id: 'alexia-5', label: 'Sustainder Alexia — 5 W (laag)', watts: 5 },
+  { id: 'alexia-20', label: 'Sustainder Alexia — 20 W', watts: 20 },
+  { id: 'alexia-40', label: 'Sustainder Alexia — 40 W', watts: 40 },
+  { id: 'alexia-60', label: 'Sustainder Alexia — 60 W', watts: 60 },
+  { id: 'alexia-90', label: 'Sustainder Alexia — 90 W (groot)', watts: 90 },
+];
+const CUSTOM_LIGHT_ID = 'custom';
+
+type Mode = 'burnHours' | 'maxPower';
+
 export default function LightingDesigner({ result, locale }: LightingDesignerProps) {
   const t = locale === 'nl' ? nl : en;
   const L = t.lighting;
@@ -34,6 +49,8 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
   const [dcEff, setDcEff] = useState(94);
   const [lightW, setLightW] = useState(25);
   const [autonomy, setAutonomy] = useState(4);
+  const [lightId, setLightId] = useState<string>('anne-25');
+  const [mode, setMode] = useState<Mode>('burnHours');
 
   const lat = result.location.lat;
 
@@ -41,33 +58,47 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
     const dodFrac = dod / 100;
     const effFrac = dcEff / 100;
     const usableWh = batteryAh * 48 * dodFrac * effFrac;
-    // Spread usable battery energy over the requested autonomy days
     const usablePerNight = autonomy > 0 ? usableWh / autonomy : usableWh;
     const safeLightW = Math.max(lightW, 0.0001);
 
     const rows = result.monthly.map((m) => {
       const nightHours = nightHoursForMonth(lat, m.month);
       const dailyYieldWh = m.total_wh_day;
+
+      // Branduren bij volle wattage van de lamp
       const fromBattery = usablePerNight / safeLightW;
       const fromHarvest = (dailyYieldWh * effFrac) / safeLightW;
       const burnHours = Math.min(nightHours, fromBattery, fromHarvest);
       const coverage = nightHours > 0 ? burnHours / nightHours : 0;
+
+      // Maximaal continu vermogen om de hele nacht te halen,
+      // beperkt door zowel batterij als dagelijkse oogst.
+      const maxW =
+        nightHours > 0
+          ? Math.min(usablePerNight, dailyYieldWh * effFrac) / nightHours
+          : 0;
+      const dimPct = Math.min(100, (maxW / safeLightW) * 100);
+
       return {
         month: m.month,
         name: months[String(m.month)],
         nightHours,
         burnHours,
         coverage,
+        maxW,
+        dimPct,
       };
     });
 
     let worst = rows[0];
-    for (const r of rows) {
-      if (r.burnHours < worst.burnHours) worst = r;
+    if (mode === 'burnHours') {
+      for (const r of rows) if (r.burnHours < worst.burnHours) worst = r;
+    } else {
+      for (const r of rows) if (r.maxW < worst.maxW) worst = r;
     }
 
     return { rows, worst, usableWh };
-  }, [batteryAh, dod, dcEff, lightW, autonomy, lat, result.monthly, months]);
+  }, [batteryAh, dod, dcEff, lightW, autonomy, lat, result.monthly, months, mode]);
 
   const worstCoveragePct = Math.round(computed.worst.coverage * 100);
   const fullCoverage = computed.rows.every((r) => r.burnHours >= r.nightHours - 0.05);
@@ -75,11 +106,31 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
     ? L.recommendationOk
     : L.recommendationDim.replace(/\{pct\}/g, String(worstCoveragePct));
 
-  const chartData = computed.rows.map((r) => ({
-    name: r.name,
-    [L.burnHours]: Number(r.burnHours.toFixed(2)),
-    [L.nightHours]: Number(r.nightHours.toFixed(2)),
-  }));
+  const chartData =
+    mode === 'burnHours'
+      ? computed.rows.map((r) => ({
+          name: r.name,
+          [L.burnHours]: Number(r.burnHours.toFixed(2)),
+          [L.nightHours]: Number(r.nightHours.toFixed(2)),
+        }))
+      : computed.rows.map((r) => ({
+          name: r.name,
+          [locale === 'nl' ? 'Max vermogen (W)' : 'Max power (W)']: Number(r.maxW.toFixed(1)),
+          [locale === 'nl' ? 'Lamp vol vermogen (W)' : 'Light full power (W)']: lightW,
+        }));
+
+  const handleLightChange = (id: string) => {
+    setLightId(id);
+    if (id !== CUSTOM_LIGHT_ID) {
+      const found = SPIRIT_LIGHTS.find((l) => l.id === id);
+      if (found) setLightW(found.watts);
+    }
+  };
+
+  const onLightWChange = (v: number) => {
+    setLightW(v);
+    setLightId(CUSTOM_LIGHT_ID);
+  };
 
   return (
     <div className="glass-card p-5">
@@ -103,12 +154,59 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
         <div className="mt-5 space-y-5">
           <p className="text-sm text-[#707070]">{L.intro}</p>
 
+          {/* Mode toggle */}
+          <div className="inline-flex rounded-lg border border-[#D7D3CD] bg-white overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setMode('burnHours')}
+              className={`px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${
+                mode === 'burnHours'
+                  ? 'bg-[#E14C2A] text-white'
+                  : 'text-[#1A1B1A] hover:bg-[#F0EDE8]'
+              }`}
+            >
+              {locale === 'nl' ? 'Max branduren' : 'Max burn hours'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('maxPower')}
+              className={`px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${
+                mode === 'maxPower'
+                  ? 'bg-[#E14C2A] text-white'
+                  : 'text-[#1A1B1A] hover:bg-[#F0EDE8]'
+              }`}
+            >
+              {locale === 'nl' ? 'Max vermogen hele nacht' : 'Max power full night'}
+            </button>
+          </div>
+
+          {/* Light dropdown */}
+          <div>
+            <label className="block text-xs text-[#707070] mb-1">
+              {locale === 'nl' ? 'SPIRIT verlichting' : 'SPIRIT luminaire'}
+            </label>
+            <select
+              value={lightId}
+              onChange={(e) => handleLightChange(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg bg-white border border-[#D7D3CD] text-[#1A1B1A] focus:outline-none focus:border-[#E14C2A] transition-colors cursor-pointer"
+            >
+              {SPIRIT_LIGHTS.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.label}
+                </option>
+              ))}
+              <option value={CUSTOM_LIGHT_ID}>
+                {locale === 'nl' ? 'Eigen waarde…' : 'Custom value…'}
+              </option>
+            </select>
+          </div>
+
           {/* Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <NumberField label={L.batteryAh} value={batteryAh} onChange={setBatteryAh} min={1} />
             <NumberField label={L.dod} value={dod} onChange={setDod} min={1} max={100} />
             <NumberField label={L.dcEff} value={dcEff} onChange={setDcEff} min={1} max={100} />
-            <NumberField label={L.lightW} value={lightW} onChange={setLightW} min={1} />
+            <NumberField label={L.lightW} value={lightW} onChange={onLightWChange} min={1} />
             <NumberField label={L.autonomy} value={autonomy} onChange={setAutonomy} min={1} />
           </div>
 
@@ -120,29 +218,62 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                 {months[String(computed.worst.month)]}
               </div>
             </div>
-            <div className="flex gap-6">
-              <div>
-                <div className="text-xs text-[#707070]">{L.burnHours}</div>
-                <div className="text-lg font-semibold text-[#1A1B1A]">
-                  {formatNumber(computed.worst.burnHours, 1, locale)} h
+            {mode === 'burnHours' ? (
+              <div className="flex gap-6">
+                <div>
+                  <div className="text-xs text-[#707070]">{L.burnHours}</div>
+                  <div className="text-lg font-semibold text-[#1A1B1A]">
+                    {formatNumber(computed.worst.burnHours, 1, locale)} h
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-[#707070]">{L.nightHours}</div>
+                  <div className="text-lg font-semibold text-[#1A1B1A]">
+                    {formatNumber(computed.worst.nightHours, 1, locale)} h
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-[#707070]">{L.coverage}</div>
+                  <div className="text-lg font-semibold text-[#E14C2A]">{worstCoveragePct}%</div>
                 </div>
               </div>
-              <div>
-                <div className="text-xs text-[#707070]">{L.nightHours}</div>
-                <div className="text-lg font-semibold text-[#1A1B1A]">
-                  {formatNumber(computed.worst.nightHours, 1, locale)} h
+            ) : (
+              <div className="flex gap-6">
+                <div>
+                  <div className="text-xs text-[#707070]">
+                    {locale === 'nl' ? 'Max vermogen' : 'Max power'}
+                  </div>
+                  <div className="text-lg font-semibold text-[#1A1B1A]">
+                    {formatNumber(computed.worst.maxW, 1, locale)} W
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-[#707070]">
+                    {locale === 'nl' ? 'Dimniveau' : 'Dim level'}
+                  </div>
+                  <div className="text-lg font-semibold text-[#E14C2A]">
+                    {Math.round(computed.worst.dimPct)}%
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-[#707070]">{L.nightHours}</div>
+                  <div className="text-lg font-semibold text-[#1A1B1A]">
+                    {formatNumber(computed.worst.nightHours, 1, locale)} h
+                  </div>
                 </div>
               </div>
-              <div>
-                <div className="text-xs text-[#707070]">{L.coverage}</div>
-                <div className="text-lg font-semibold text-[#E14C2A]">{worstCoveragePct}%</div>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Chart */}
           <div>
-            <h4 className="text-sm font-medium text-[#1A1B1A] mb-2">{L.chartTitle}</h4>
+            <h4 className="text-sm font-medium text-[#1A1B1A] mb-2">
+              {mode === 'burnHours'
+                ? L.chartTitle
+                : locale === 'nl'
+                  ? 'Maximaal continu vermogen per maand'
+                  : 'Maximum continuous power per month'}
+            </h4>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
@@ -165,8 +296,25 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                   }}
                 />
                 <Legend />
-                <Bar dataKey={L.burnHours} fill="#E14C2A" radius={[4, 4, 0, 0]} />
-                <Bar dataKey={L.nightHours} fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                {mode === 'burnHours' ? (
+                  <>
+                    <Bar dataKey={L.burnHours} fill="#E14C2A" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey={L.nightHours} fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                  </>
+                ) : (
+                  <>
+                    <Bar
+                      dataKey={locale === 'nl' ? 'Max vermogen (W)' : 'Max power (W)'}
+                      fill="#E14C2A"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      dataKey={locale === 'nl' ? 'Lamp vol vermogen (W)' : 'Light full power (W)'}
+                      fill="#0ea5e9"
+                      radius={[4, 4, 0, 0]}
+                    />
+                  </>
+                )}
               </BarChart>
             </ResponsiveContainer>
           </div>
