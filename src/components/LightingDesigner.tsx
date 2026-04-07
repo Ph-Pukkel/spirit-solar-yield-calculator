@@ -84,6 +84,9 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
       // A luminaire never draws more than its rated wattage, so cap at lightW.
       const maxW = Math.min(rawMaxW, lightW);
       const dimPct = (maxW / safeLightW) * 100;
+      // Average power the battery alone (full charge) could sustain across the night,
+      // ignoring whether the daily harvest can refill it.
+      const batteryOnlyW = nightHours > 0 ? usablePerNight / nightHours : 0;
 
       return {
         month: m.month,
@@ -93,6 +96,7 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
         coverage,
         maxW,
         dimPct,
+        batteryOnlyW,
       };
     });
 
@@ -122,8 +126,12 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
       : computed.rows.map((r) => ({
           name: r.name,
           [locale === 'nl' ? 'Max vermogen (W)' : 'Max power (W)']: Number(r.maxW.toFixed(1)),
-          [locale === 'nl' ? 'Lamp vol vermogen (W)' : 'Light full power (W)']: lightW,
+          [locale === 'nl' ? 'Vermogen volle accu (W)' : 'Full battery power (W)']: Number(
+            r.batteryOnlyW.toFixed(1)
+          ),
           pctLabel: `${Math.round(Math.min(100, r.dimPct))}%`,
+          nightHours: r.nightHours,
+          burnHours: r.burnHours,
         }));
 
   const handleLightChange = (id: string) => {
@@ -314,10 +322,58 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                   tickLine={false}
                 />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #D7D3CD',
-                    borderRadius: 8,
+                  content={({ active, payload, label }) => {
+                    if (!active || !payload || payload.length === 0) return null;
+                    const row = payload[0]?.payload as
+                      | { nightHours?: number; burnHours?: number }
+                      | undefined;
+                    return (
+                      <div className="bg-white border border-[#D7D3CD] rounded-lg p-3 shadow-md text-sm">
+                        <p className="text-[#1A1B1A] font-semibold mb-1">{label}</p>
+                        {payload.map((entry, i) => (
+                          <div
+                            key={i}
+                            className="flex items-center justify-between gap-4"
+                          >
+                            <span className="flex items-center gap-2 text-[#3E3D3D]">
+                              <span
+                                className="w-2.5 h-2.5 rounded-full inline-block"
+                                style={{ backgroundColor: entry.color }}
+                              />
+                              {entry.name}
+                            </span>
+                            <span className="text-[#1A1B1A] font-medium">
+                              {formatNumber(Number(entry.value), 1, locale)}
+                            </span>
+                          </div>
+                        ))}
+                        {row?.nightHours !== undefined && (
+                          <div className="border-t border-[#E5E5E5] mt-2 pt-2 text-xs text-[#707070]">
+                            {mode === 'maxPower' ? (
+                              <div className="flex items-center justify-between">
+                                <span>
+                                  {locale === 'nl' ? 'Branduren / nacht' : 'Burn hours / night'}
+                                </span>
+                                <span className="text-[#1A1B1A] font-medium">
+                                  {formatNumber(row.nightHours, 1, locale)} h
+                                </span>
+                              </div>
+                            ) : (
+                              row.burnHours !== undefined && (
+                                <div className="flex items-center justify-between">
+                                  <span>
+                                    {locale === 'nl' ? 'Dekking' : 'Coverage'}
+                                  </span>
+                                  <span className="text-[#1A1B1A] font-medium">
+                                    {Math.round((row.burnHours / row.nightHours) * 100)}%
+                                  </span>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
                   }}
                 />
                 <Legend />
@@ -352,7 +408,7 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                       />
                     </Bar>
                     <Bar
-                      dataKey={locale === 'nl' ? 'Lamp vol vermogen (W)' : 'Light full power (W)'}
+                      dataKey={locale === 'nl' ? 'Vermogen volle accu (W)' : 'Full battery power (W)'}
                       fill="#0ea5e9"
                       radius={[4, 4, 0, 0]}
                     />

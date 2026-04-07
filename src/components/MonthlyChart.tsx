@@ -13,12 +13,14 @@ import {
 } from 'recharts';
 import type { MonthlyResult, Locale } from '@/lib/types';
 import { formatNumber } from '@/lib/solar-utils';
+import { dayHoursForMonth } from '@/lib/night-length';
 import nl from '@/i18n/nl.json';
 import en from '@/i18n/en.json';
 
 interface MonthlyChartProps {
   data: MonthlyResult[];
   locale: Locale;
+  lat: number;
 }
 
 type ViewMode = 'daily' | 'monthly';
@@ -34,6 +36,7 @@ interface TooltipPayloadEntry {
   name: string;
   value: number;
   color: string;
+  payload?: { whPerSunHour?: number; sunHours?: number };
 }
 
 interface CustomTooltipProps {
@@ -50,6 +53,7 @@ function CustomTooltip({ active, payload, label, locale, mode }: CustomTooltipPr
 
   const total = payload.reduce((sum, entry) => sum + entry.value, 0);
   const unit = mode === 'daily' ? t.results.whPerDay : t.results.kwhPerMonth;
+  const row = payload[0]?.payload;
 
   return (
     <div className="bg-white border border-[#D7D3CD] rounded-lg p-3 shadow-md">
@@ -74,6 +78,17 @@ function CustomTooltip({ active, payload, label, locale, mode }: CustomTooltipPr
           {formatNumber(total, mode === 'daily' ? 0 : 1, locale)} {unit}
         </span>
       </div>
+      {row?.whPerSunHour !== undefined && row?.sunHours !== undefined && (
+        <div className="mt-1 pt-1 flex items-center justify-between text-xs">
+          <span className="text-[#707070]">
+            {locale === 'nl' ? 'Wh sunrise–sunset p/h' : 'Wh sunrise–sunset p/h'}
+          </span>
+          <span className="text-[#1A1B1A] font-medium">
+            {formatNumber(row.whPerSunHour, 0, locale)} Wh/h
+            <span className="text-[#A5A5A4]"> · {formatNumber(row.sunHours, 1, locale)} h</span>
+          </span>
+        </div>
+      )}
     </div>
   );
 }
@@ -100,19 +115,25 @@ function CustomLegend({ payload }: { payload?: LegendPayloadEntry[] }) {
   );
 }
 
-export default function MonthlyChart({ data, locale }: MonthlyChartProps) {
+export default function MonthlyChart({ data, locale, lat }: MonthlyChartProps) {
   const t = locale === 'nl' ? nl : en;
   const [mode, setMode] = useState<ViewMode>('daily');
 
   const months = t.months as Record<string, string>;
 
-  const chartData = data.map((m) => ({
-    name: months[String(m.month)],
-    [t.config.north]: mode === 'daily' ? m.north_wh_day : m.north_kwh_month,
-    [t.config.east]: mode === 'daily' ? m.east_wh_day : m.east_kwh_month,
-    [t.config.south]: mode === 'daily' ? m.south_wh_day : m.south_kwh_month,
-    [t.config.west]: mode === 'daily' ? m.west_wh_day : m.west_kwh_month,
-  }));
+  const chartData = data.map((m) => {
+    const sunHours = dayHoursForMonth(lat, m.month);
+    const whPerSunHour = sunHours > 0 ? m.total_wh_day / sunHours : 0;
+    return {
+      name: months[String(m.month)],
+      [t.config.north]: mode === 'daily' ? m.north_wh_day : m.north_kwh_month,
+      [t.config.east]: mode === 'daily' ? m.east_wh_day : m.east_kwh_month,
+      [t.config.south]: mode === 'daily' ? m.south_wh_day : m.south_kwh_month,
+      [t.config.west]: mode === 'daily' ? m.west_wh_day : m.west_kwh_month,
+      sunHours,
+      whPerSunHour,
+    };
+  });
 
   const yLabel = mode === 'daily' ? t.results.whPerDay : t.results.kwhPerMonth;
 
