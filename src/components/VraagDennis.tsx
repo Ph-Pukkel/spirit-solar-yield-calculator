@@ -119,7 +119,14 @@ export default function VraagDennis() {
         style={{ backgroundColor: '#E14C2A', visibility: hiddenForCapture ? 'hidden' : 'visible' }}
       >
         <span>Vraag Dennis</span>
-        <span className="text-xl leading-none" aria-hidden>🦖</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/trex.svg"
+          alt=""
+          aria-hidden
+          className="w-6 h-6 flex-shrink-0"
+          style={{ filter: 'brightness(0) invert(1)' }}
+        />
       </button>
 
       {/* Annotator overlay (above modal so it gets full screen) */}
