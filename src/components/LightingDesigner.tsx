@@ -77,11 +77,13 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
 
       // Maximaal continu vermogen om de hele nacht te halen,
       // beperkt door zowel batterij als dagelijkse oogst.
-      const maxW =
+      const rawMaxW =
         nightHours > 0
           ? Math.min(usablePerNight, dailyYieldWh * effFrac) / nightHours
           : 0;
-      const dimPct = Math.min(100, (maxW / safeLightW) * 100);
+      // A luminaire never draws more than its rated wattage, so cap at lightW.
+      const maxW = Math.min(rawMaxW, lightW);
+      const dimPct = (maxW / safeLightW) * 100;
 
       return {
         month: m.month,

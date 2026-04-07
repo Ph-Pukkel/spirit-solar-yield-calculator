@@ -289,8 +289,9 @@ coverage       = brand_uren / nightHours`}
 
           <FormulaCard
             title="9. Lighting Designer — max vermogen voor hele nacht"
-            formula={`max_W   = min( usable_per_nacht, dagelijkse_Wh × eff/100 ) / nightHours
-dim_pct = min( 100, max_W / lichtW × 100 )`}
+            formula={`raw_max_W = min( usable_per_nacht, dagelijkse_Wh × eff/100 ) / nightHours
+max_W     = min( raw_max_W, lichtW )      lamp kan nooit > vol vermogen trekken
+dim_pct   = max_W / lichtW × 100`}
             note="Het hoogste constante vermogen waarmee de lamp de héle nacht kan branden, gelimiteerd door zowel accu als dagopbrengst. dim_pct is dat vermogen uitgedrukt als percentage van het volle lampvermogen."
           />
         </div>
