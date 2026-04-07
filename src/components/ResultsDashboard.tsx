@@ -33,7 +33,7 @@ export default function ResultsDashboard({ result, locale, onReset }: ResultsDas
 
       <MonthlyChart data={result.monthly} locale={locale} />
 
-      <DetailTable data={result.monthly} locale={locale} />
+      <DetailTable data={result.monthly} locale={locale} lat={result.location.lat} />
 
       <LightingDesigner result={result} locale={locale} />
 

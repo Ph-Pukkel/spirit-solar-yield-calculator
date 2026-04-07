@@ -2,15 +2,17 @@
 
 import type { MonthlyResult, Locale } from '@/lib/types';
 import { formatNumber } from '@/lib/solar-utils';
+import { dayHoursForMonth } from '@/lib/night-length';
 import nl from '@/i18n/nl.json';
 import en from '@/i18n/en.json';
 
 interface DetailTableProps {
   data: MonthlyResult[];
   locale: Locale;
+  lat: number;
 }
 
-export default function DetailTable({ data, locale }: DetailTableProps) {
+export default function DetailTable({ data, locale, lat }: DetailTableProps) {
   const t = locale === 'nl' ? nl : en;
   const months = t.months as Record<string, string>;
 
@@ -21,6 +23,13 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
   const yearAvgWest = data.reduce((s, m) => s + m.west_wh_day, 0) / data.length;
   const yearAvgTotal = data.reduce((s, m) => s + m.total_wh_day, 0) / data.length;
   const yearTotalKwh = data.reduce((s, m) => s + m.total_kwh_month, 0);
+
+  // Average Wh per sunlight hour, per month + year average
+  const perHourSun = data.map((m) => {
+    const dh = dayHoursForMonth(lat, m.month);
+    return dh > 0 ? m.total_wh_day / dh : 0;
+  });
+  const yearAvgPerHourSun = perHourSun.reduce((a, b) => a + b, 0) / perHourSun.length;
 
   const directionHeaders = [
     { label: t.config.north, color: '#8b5cf6' },
@@ -65,6 +74,12 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
                   ({t.results.kwhPerMonth})
                 </span>
               </th>
+              <th className="text-right py-3 px-3 text-[#f59e0b] font-medium">
+                {locale === 'nl' ? 'Opbrengst' : 'Yield'}
+                <span className="block text-xs font-normal opacity-70">
+                  (Wh sunrise-sunset p/h)
+                </span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -96,6 +111,9 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
                 <td className="py-2.5 px-3 text-right text-[#1A1B1A] font-semibold">
                   {formatNumber(row.total_kwh_month, 1, locale)}
                 </td>
+                <td className="py-2.5 px-3 text-right text-[#3E3D3D]">
+                  {formatNumber(perHourSun[i], 0, locale)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -121,6 +139,9 @@ export default function DetailTable({ data, locale }: DetailTableProps) {
               </td>
               <td className="py-3 px-3 text-right text-spirit-cinnabar font-bold">
                 {formatNumber(yearTotalKwh, 1, locale)}
+              </td>
+              <td className="py-3 px-3 text-right text-[#3E3D3D] font-semibold">
+                {formatNumber(yearAvgPerHourSun, 0, locale)}
               </td>
             </tr>
           </tfoot>
