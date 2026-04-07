@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageCircle, X, Camera, Trash2, Send, Undo2, Eraser, Check } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { MessageCircle, X, Camera, Trash2, Send, Undo2, Eraser, Check, Pencil } from 'lucide-react';
 
 export default function VraagDennis() {
   const [open, setOpen] = useState(false);
@@ -298,11 +298,59 @@ type Stroke = { points: { x: number; y: number }[] };
 function Annotator({ src, onCancel, onDone }: AnnotatorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const [strokes, setStrokes] = useState<Stroke[]>([]);
-  const [drawing, setDrawing] = useState(false);
+  const strokesRef = useRef<Stroke[]>([]);
   const currentRef = useRef<Stroke | null>(null);
+  const drawingRef = useRef(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [strokeCount, setStrokeCount] = useState(0); // for undo/clear button enable state
+  const [hasDrawn, setHasDrawn] = useState(false);
 
-  const redraw = useCallback(() => {
+  // Load the image once when src changes; size the canvas to fit.
+  useEffect(() => {
+    let cancelled = false;
+    setImgLoaded(false);
+    strokesRef.current = [];
+    setStrokeCount(0);
+    setHasDrawn(false);
+
+    const img = new window.Image();
+    img.onload = () => {
+      if (cancelled) return;
+      imgRef.current = img;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const maxW = Math.min(window.innerWidth - 32, 1200);
+      const maxH = window.innerHeight - 220;
+      const ratio = Math.min(maxW / img.width, maxH / img.height, 1);
+      canvas.width = Math.max(1, Math.round(img.width * ratio));
+      canvas.height = Math.max(1, Math.round(img.height * ratio));
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      }
+      setImgLoaded(true);
+    };
+    img.onerror = () => {
+      console.error('Annotator: image failed to load');
+    };
+    img.src = src;
+
+    return () => {
+      cancelled = true;
+    };
+  }, [src]);
+
+  // Lock body scroll while annotator is open
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
+  const fullRedraw = () => {
     const canvas = canvasRef.current;
     const img = imgRef.current;
     if (!canvas || !img) return;
@@ -310,41 +358,35 @@ function Annotator({ src, onCancel, onDone }: AnnotatorProps) {
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    applyStrokeStyle(ctx, canvas);
+    for (const s of strokesRef.current) {
+      drawStroke(ctx, s);
+    }
+  };
+
+  const applyStrokeStyle = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
     ctx.strokeStyle = '#E14C2A';
-    ctx.lineWidth = Math.max(3, canvas.width / 400);
+    ctx.lineWidth = Math.max(3, canvas.width / 350);
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    for (const s of strokes) {
-      if (s.points.length < 2) continue;
-      ctx.beginPath();
-      ctx.moveTo(s.points[0].x, s.points[0].y);
-      for (let i = 1; i < s.points.length; i++) {
-        ctx.lineTo(s.points[i].x, s.points[i].y);
-      }
-      ctx.stroke();
+  };
+
+  const drawStroke = (ctx: CanvasRenderingContext2D, s: Stroke) => {
+    if (s.points.length === 0) return;
+    ctx.beginPath();
+    if (s.points.length === 1) {
+      // Single tap → small dot
+      ctx.arc(s.points[0].x, s.points[0].y, ctx.lineWidth / 2, 0, Math.PI * 2);
+      ctx.fillStyle = '#E14C2A';
+      ctx.fill();
+      return;
     }
-  }, [strokes]);
-
-  // Load image and size canvas to fit viewport while preserving aspect
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      imgRef.current = img;
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const maxW = Math.min(window.innerWidth - 32, 1200);
-      const maxH = window.innerHeight - 180;
-      const ratio = Math.min(maxW / img.width, maxH / img.height, 1);
-      canvas.width = Math.round(img.width * ratio);
-      canvas.height = Math.round(img.height * ratio);
-      redraw();
-    };
-    img.src = src;
-  }, [src, redraw]);
-
-  useEffect(() => {
-    redraw();
-  }, [strokes, redraw]);
+    ctx.moveTo(s.points[0].x, s.points[0].y);
+    for (let i = 1; i < s.points.length; i++) {
+      ctx.lineTo(s.points[i].x, s.points[i].y);
+    }
+    ctx.stroke();
+  };
 
   const getPoint = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current!;
@@ -356,45 +398,60 @@ function Annotator({ src, onCancel, onDone }: AnnotatorProps) {
   };
 
   const start = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    (e.target as HTMLCanvasElement).setPointerCapture(e.pointerId);
-    const p = getPoint(e);
-    currentRef.current = { points: [p] };
-    setDrawing(true);
+    if (!imgLoaded) return;
+    try {
+      e.preventDefault();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      try { canvas.setPointerCapture(e.pointerId); } catch {}
+      const p = getPoint(e);
+      currentRef.current = { points: [p] };
+      drawingRef.current = true;
+      setHasDrawn(true);
+    } catch (err) {
+      console.error('annot start', err);
+    }
   };
 
   const move = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!drawing || !currentRef.current) return;
-    const p = getPoint(e);
-    currentRef.current.points.push(p);
-    // Live preview without setState churn
-    const canvas = canvasRef.current;
-    if (canvas && imgRef.current) {
+    if (!drawingRef.current || !currentRef.current) return;
+    try {
+      const p = getPoint(e);
+      const pts = currentRef.current.points;
+      pts.push(p);
+      const canvas = canvasRef.current;
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      if (ctx) {
-        const pts = currentRef.current.points;
-        ctx.strokeStyle = '#E14C2A';
-        ctx.lineWidth = Math.max(3, canvas.width / 400);
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.beginPath();
-        ctx.moveTo(pts[pts.length - 2].x, pts[pts.length - 2].y);
-        ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-        ctx.stroke();
-      }
+      if (!ctx) return;
+      applyStrokeStyle(ctx, canvas);
+      ctx.beginPath();
+      ctx.moveTo(pts[pts.length - 2].x, pts[pts.length - 2].y);
+      ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+      ctx.stroke();
+    } catch (err) {
+      console.error('annot move', err);
     }
   };
 
   const end = () => {
     if (currentRef.current && currentRef.current.points.length > 0) {
-      setStrokes((s) => [...s, currentRef.current!]);
+      strokesRef.current.push(currentRef.current);
+      setStrokeCount(strokesRef.current.length);
     }
     currentRef.current = null;
-    setDrawing(false);
+    drawingRef.current = false;
   };
 
-  const undo = () => setStrokes((s) => s.slice(0, -1));
-  const clear = () => setStrokes([]);
+  const undo = () => {
+    strokesRef.current.pop();
+    setStrokeCount(strokesRef.current.length);
+    fullRedraw();
+  };
+  const clear = () => {
+    strokesRef.current = [];
+    setStrokeCount(0);
+    fullRedraw();
+  };
 
   const done = () => {
     const canvas = canvasRef.current;
@@ -407,29 +464,47 @@ function Annotator({ src, onCancel, onDone }: AnnotatorProps) {
       className="fixed inset-0 z-[60] flex flex-col items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
     >
-      <div className="mb-3 text-white text-sm font-medium">
-        Teken op de screenshot om een aanwijzing te geven
+      <div
+        className="mb-3 flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold shadow-lg"
+        style={{ backgroundColor: '#E14C2A' }}
+      >
+        <Pencil className="w-4 h-4" />
+        Teken met je muis of vinger op de afbeelding om aan te wijzen wat je bedoelt
       </div>
-      <canvas
-        ref={canvasRef}
-        onPointerDown={start}
-        onPointerMove={move}
-        onPointerUp={end}
-        onPointerCancel={end}
-        className="rounded-lg shadow-2xl bg-white touch-none"
-        style={{ cursor: 'crosshair', maxWidth: '100%', maxHeight: '70vh' }}
-      />
+      <div
+        className="relative rounded-lg overflow-hidden shadow-2xl"
+        style={{ outline: '3px dashed #E14C2A', outlineOffset: '4px' }}
+      >
+        <canvas
+          ref={canvasRef}
+          onPointerDown={start}
+          onPointerMove={move}
+          onPointerUp={end}
+          onPointerCancel={end}
+          onPointerLeave={end}
+          className="block bg-white touch-none"
+          style={{ cursor: 'crosshair', maxWidth: '100%', maxHeight: '70vh' }}
+        />
+        {imgLoaded && !hasDrawn && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="px-4 py-2 rounded-full bg-white/90 text-[#1A1B1A] text-sm font-medium shadow flex items-center gap-2">
+              <Pencil className="w-4 h-4" style={{ color: '#E14C2A' }} />
+              Teken hier
+            </div>
+          </div>
+        )}
+      </div>
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
         <button
           onClick={undo}
-          disabled={strokes.length === 0}
+          disabled={strokeCount === 0}
           className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white text-[#1A1B1A] text-sm font-medium hover:bg-[#F0EDE8] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Undo2 className="w-4 h-4" /> Ongedaan maken
         </button>
         <button
           onClick={clear}
-          disabled={strokes.length === 0}
+          disabled={strokeCount === 0}
           className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white text-[#1A1B1A] text-sm font-medium hover:bg-[#F0EDE8] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Eraser className="w-4 h-4" /> Wissen
