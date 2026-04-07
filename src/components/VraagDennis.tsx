@@ -10,6 +10,7 @@ export default function VraagDennis() {
   const [screenshot, setScreenshot] = useState<string | null>(null); // final annotated dataURL
   const [editing, setEditing] = useState<string | null>(null); // raw screenshot dataURL while annotating
   const [capturing, setCapturing] = useState(false);
+  const [hiddenForCapture, setHiddenForCapture] = useState(false);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,6 +37,13 @@ export default function VraagDennis() {
     setCapturing(true);
     setError(null);
     try {
+      // Hide the modal + floating button before the user picks the source,
+      // so they don't show up in the captured frame.
+      setHiddenForCapture(true);
+      // Let React paint the hidden state before opening the picker.
+      await new Promise((r) => requestAnimationFrame(() => r(null)));
+      await new Promise((r) => requestAnimationFrame(() => r(null)));
+
       const stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({
         video: true,
         audio: false,
@@ -68,6 +76,7 @@ export default function VraagDennis() {
       }
     } finally {
       setCapturing(false);
+      setHiddenForCapture(false);
     }
   };
 
@@ -107,7 +116,7 @@ export default function VraagDennis() {
         onClick={handleOpen}
         aria-label="Vraag Dennis"
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-full shadow-lg text-white font-semibold text-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
-        style={{ backgroundColor: '#E14C2A' }}
+        style={{ backgroundColor: '#E14C2A', visibility: hiddenForCapture ? 'hidden' : 'visible' }}
       >
         <MessageCircle className="w-5 h-5 flex-shrink-0" />
         <span>Vraag Dennis</span>
@@ -129,7 +138,11 @@ export default function VraagDennis() {
       {open && !editing && (
         <div
           className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(2px)' }}
+          style={{
+            backgroundColor: 'rgba(0,0,0,0.35)',
+            backdropFilter: 'blur(2px)',
+            visibility: hiddenForCapture ? 'hidden' : 'visible',
+          }}
           onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
         >
           <div
