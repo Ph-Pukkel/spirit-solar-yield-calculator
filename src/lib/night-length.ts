@@ -38,6 +38,14 @@ export function nightHoursForMonth(lat: number, month: number): number {
 }
 
 /**
+ * Average daylight hours (sunrise to sunset) per day for the given latitude
+ * and month. Inverse of nightHoursForMonth.
+ */
+export function dayHoursForMonth(lat: number, month: number): number {
+  return 24 - nightHoursForMonth(lat, month);
+}
+
+/**
  * Helper: average night hours across the year, weighted equally per month.
  * monthlyDaytimeWh is currently unused but accepted to allow future
  * energy-weighted averaging.

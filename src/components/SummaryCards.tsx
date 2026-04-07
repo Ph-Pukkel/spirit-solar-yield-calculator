@@ -1,9 +1,9 @@
 'use client';
 
-import { Sun, TrendingUp, TrendingDown, BarChart3, Moon } from 'lucide-react';
+import { Sun, TrendingUp, TrendingDown, BarChart3, Moon, Sunrise } from 'lucide-react';
 import type { CalculationResult, Locale } from '@/lib/types';
 import { formatNumber } from '@/lib/solar-utils';
-import { nightHoursForMonth } from '@/lib/night-length';
+import { nightHoursForMonth, dayHoursForMonth } from '@/lib/night-length';
 import nl from '@/i18n/nl.json';
 import en from '@/i18n/en.json';
 
@@ -31,6 +31,14 @@ export default function SummaryCards({ result, locale }: SummaryCardsProps) {
   const avgNightPower =
     monthlyNightPowers.reduce((a, b) => a + b, 0) / monthlyNightPowers.length;
 
+  // Average daytime power (W): for each month dailyWh / dayHours, then average.
+  const monthlyDayPowers = result.monthly.map((m) => {
+    const dh = dayHoursForMonth(lat, m.month);
+    return dh > 0 ? m.total_wh_day / dh : 0;
+  });
+  const avgDayPower =
+    monthlyDayPowers.reduce((a, b) => a + b, 0) / monthlyDayPowers.length;
+
   const cards: CardData[] = [
     {
       icon: <Sun className="w-6 h-6 text-spirit-cinnabar" />,
@@ -57,6 +65,12 @@ export default function SummaryCards({ result, locale }: SummaryCardsProps) {
       unit: t.results.whPerDay,
     },
     {
+      icon: <Sunrise className="w-6 h-6 text-[#f59e0b]" />,
+      label: t.results.avgDayPower,
+      value: formatNumber(avgDayPower, 0, locale),
+      unit: t.results.watts,
+    },
+    {
       icon: <Moon className="w-6 h-6 text-[#0ea5e9]" />,
       label: t.results.avgNightPower,
       value: formatNumber(avgNightPower, 0, locale),
@@ -65,7 +79,7 @@ export default function SummaryCards({ result, locale }: SummaryCardsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
       {cards.map((card, i) => (
         <div key={i} className="glass-card p-5 flex flex-col gap-3">
           <div className="flex items-center gap-3">

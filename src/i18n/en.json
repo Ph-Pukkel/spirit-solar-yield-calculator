@@ -39,6 +39,7 @@
     "worstMonth": "Worst month",
     "avgDaily": "Avg. daily yield",
     "avgNightPower": "Avg. power at night",
+    "avgDayPower": "Avg. power during day",
     "watts": "W",
     "whPerDay": "Wh/day",
     "kwhPerYear": "kWh/year",
