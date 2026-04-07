@@ -321,8 +321,20 @@ export default function LightingDesigner({ result, locale }: LightingDesignerPro
                 <Legend />
                 {mode === 'burnHours' ? (
                   <>
-                    <Bar dataKey={L.burnHours} fill="#E14C2A" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey={L.nightHours} fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey={L.burnHours} fill="#E14C2A" radius={[4, 4, 0, 0]}>
+                      <LabelList
+                        dataKey={L.burnHours}
+                        position="top"
+                        style={{ fill: '#E14C2A', fontSize: 11, fontWeight: 600 }}
+                      />
+                    </Bar>
+                    <Bar dataKey={L.nightHours} fill="#0ea5e9" radius={[4, 4, 0, 0]}>
+                      <LabelList
+                        dataKey={L.nightHours}
+                        position="top"
+                        style={{ fill: '#0ea5e9', fontSize: 11, fontWeight: 600 }}
+                      />
+                    </Bar>
                   </>
                 ) : (
                   <>

@@ -45,6 +45,10 @@ const ASSUMPTIONS: { title: string; body: string }[] = [
     body: 'De brand-uren worden gelimiteerd door min(nachtlengte, accu-energie/lamp, dag-oogst×eff/lamp). De derde term houdt in dat we er vanuit gaan dat alles wat 1 dag wordt opgewekt ook diezelfde nacht weer verbruikt mag worden — voor lange-termijn duurzaamheid is dat correct, voor 1 cloudy night is het pessimistisch.',
   },
   {
+    title: 'Accuspanning constant tijdens ontlading (geen voltage sag)',
+    body: 'De formule rekent met usable_Wh = Ah × NOMINALE spanning (24 of 48 V). In werkelijkheid daalt de klemspanning naarmate de accu leeg raakt. Voor LiFePO4 — de standaard chemie in 48 V outdoor/off-grid-systemen zoals SPIRIT/Sustainder gebruikt — is de ontlaadcurve heel vlak: tussen ~10 % en ~90 % SoC blijft de spanning binnen ±5 % van nominaal, dus de overschatting van geleverde Wh blijft typisch onder ~3 %. Voor lood-zuur zou dit 10–15 % zijn en zou een veiligheidsmarge nodig zijn. Sustainder publiceert geen expliciete derating-curve in de Anne/Alexia productsheets; de aanname dat we met nominale spanning mogen rekenen is industriestandaard voor LiFePO4-sizing op maandgemiddelden, maar het is een AANNAME en niet een gemeten waarde uit de SPIRIT documentatie.',
+  },
+  {
     title: 'Cooper\'s declinatieformule',
     body: 'δ = 23,45° × sin(360° × (284+N)/365). Nauwkeurig tot ±1° declinatie → ±4 minuten daglengte op 50° NB. Acceptabel voor maandgemiddelden.',
   },
