@@ -17,6 +17,7 @@ interface CardData {
   label: string;
   value: string;
   unit: string;
+  tip?: string;
 }
 
 export default function SummaryCards({ result, locale }: SummaryCardsProps) {
@@ -69,22 +70,27 @@ export default function SummaryCards({ result, locale }: SummaryCardsProps) {
       label: t.results.avgDayPower,
       value: formatNumber(avgDayPower, 0, locale),
       unit: t.results.watts,
+      tip: t.results.avgDayPowerTip,
     },
     {
       icon: <Moon className="w-6 h-6 text-[#0ea5e9]" />,
       label: t.results.avgNightPower,
       value: formatNumber(avgNightPower, 0, locale),
       unit: t.results.watts,
+      tip: t.results.avgNightPowerTip,
     },
   ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
       {cards.map((card, i) => (
-        <div key={i} className="glass-card p-5 flex flex-col gap-3">
+        <div key={i} className="glass-card p-5 flex flex-col gap-3" title={card.tip}>
           <div className="flex items-center gap-3">
             {card.icon}
-            <span className="text-sm text-[#707070]">{card.label}</span>
+            <span className="text-sm text-[#707070]">
+              {card.label}
+              {card.tip && <span className="ml-1 text-[#A5A5A4]" aria-hidden>ⓘ</span>}
+            </span>
           </div>
           <div>
             <span className="text-2xl font-bold text-[#1A1B1A]">

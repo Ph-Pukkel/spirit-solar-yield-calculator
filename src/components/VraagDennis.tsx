@@ -1,19 +1,18 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { MessageCircle, X, Camera, Trash2, Send } from 'lucide-react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { MessageCircle, X, Camera, Trash2, Send, Undo2, Eraser, Check } from 'lucide-react';
 
 export default function VraagDennis() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
-  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const [screenshot, setScreenshot] = useState<string | null>(null); // final annotated dataURL
+  const [editing, setEditing] = useState<string | null>(null); // raw screenshot dataURL while annotating
   const [capturing, setCapturing] = useState(false);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const modalRef = useRef<HTMLDivElement>(null);
 
   const handleOpen = () => {
     setSent(false);
@@ -23,11 +22,11 @@ export default function VraagDennis() {
 
   const handleClose = () => {
     setOpen(false);
-    // reset after close animation
     setTimeout(() => {
       setName('');
       setMessage('');
       setScreenshot(null);
+      setEditing(null);
       setSent(false);
       setError(null);
     }, 200);
@@ -37,27 +36,37 @@ export default function VraagDennis() {
     setCapturing(true);
     setError(null);
     try {
-      // Temporarily hide the modal so it doesn't appear in screenshot
-      if (modalRef.current) modalRef.current.style.visibility = 'hidden';
-      const floatBtn = document.getElementById('vraag-dennis-float');
-      if (floatBtn) floatBtn.style.visibility = 'hidden';
+      const stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: false,
+      } as DisplayMediaStreamOptions);
 
-      await new Promise((r) => setTimeout(r, 80));
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.muted = true;
+      await video.play();
+      // Give the browser a frame to settle
+      await new Promise((r) => setTimeout(r, 250));
 
-      const html2canvas = (await import('html2canvas')).default;
-      const canvas = await html2canvas(document.body, {
-        useCORS: true,
-        scale: 0.75,
-        logging: false,
-      });
-      setScreenshot(canvas.toDataURL('image/jpeg', 0.7));
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas niet beschikbaar');
+      ctx.drawImage(video, 0, 0);
+
+      stream.getTracks().forEach((t) => t.stop());
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      setEditing(dataUrl);
     } catch (e) {
       console.error('Screenshot error', e);
-      setError('Screenshot mislukt. Probeer het opnieuw.');
+      const msg = e instanceof Error ? e.message : 'Screenshot mislukt';
+      // User cancelling the picker is normal — don't show as error
+      if (!/permission|denied|aborted|cancel/i.test(msg)) {
+        setError('Screenshot mislukt. Probeer het opnieuw.');
+      }
     } finally {
-      if (modalRef.current) modalRef.current.style.visibility = '';
-      const floatBtn = document.getElementById('vraag-dennis-float');
-      if (floatBtn) floatBtn.style.visibility = '';
       setCapturing(false);
     }
   };
@@ -104,20 +113,29 @@ export default function VraagDennis() {
         <span>Vraag Dennis</span>
       </button>
 
-      {/* Backdrop */}
-      {open && (
+      {/* Annotator overlay (above modal so it gets full screen) */}
+      {editing && (
+        <Annotator
+          src={editing}
+          onCancel={() => setEditing(null)}
+          onDone={(dataUrl) => {
+            setScreenshot(dataUrl);
+            setEditing(null);
+          }}
+        />
+      )}
+
+      {/* Modal */}
+      {open && !editing && (
         <div
           className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
           style={{ backgroundColor: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(2px)' }}
           onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
         >
-          {/* Modal */}
           <div
-            ref={modalRef}
             className="glass-card w-full max-w-md p-6 flex flex-col gap-4"
             style={{ maxHeight: '90vh', overflowY: 'auto' }}
           >
-            {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" style={{ color: '#E14C2A' }} />
@@ -133,7 +151,6 @@ export default function VraagDennis() {
             </div>
 
             {sent ? (
-              /* Success state */
               <div className="flex flex-col items-center gap-3 py-6 text-center">
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center"
@@ -153,7 +170,6 @@ export default function VraagDennis() {
               </div>
             ) : (
               <>
-                {/* Name field */}
                 <div>
                   <label className="block text-sm text-[#707070] mb-1">
                     Naam <span className="text-[#A5A5A4]">(optioneel)</span>
@@ -167,7 +183,6 @@ export default function VraagDennis() {
                   />
                 </div>
 
-                {/* Message field */}
                 <div>
                   <label className="block text-sm text-[#707070] mb-1">
                     Bericht <span className="text-[#E14C2A]">*</span>
@@ -181,20 +196,28 @@ export default function VraagDennis() {
                   />
                 </div>
 
-                {/* Screenshot section */}
                 <div>
                   {screenshot ? (
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-[#707070]">Screenshot</span>
-                        <button
-                          onClick={() => setScreenshot(null)}
-                          className="flex items-center gap-1 text-xs text-[#E14C2A] hover:underline cursor-pointer"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                          Verwijderen
-                        </button>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => setEditing(screenshot)}
+                            className="text-xs text-[#E14C2A] hover:underline cursor-pointer"
+                          >
+                            Bewerken
+                          </button>
+                          <button
+                            onClick={() => setScreenshot(null)}
+                            className="flex items-center gap-1 text-xs text-[#E14C2A] hover:underline cursor-pointer"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                            Verwijderen
+                          </button>
+                        </div>
                       </div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={screenshot}
                         alt="Screenshot preview"
@@ -212,16 +235,17 @@ export default function VraagDennis() {
                       {capturing ? 'Bezig met screenshot...' : 'Maak screenshot'}
                     </button>
                   )}
+                  <p className="mt-1 text-xs text-[#A5A5A4]">
+                    Browser vraagt welk venster/tabblad je wilt delen. Daarna kun je erop tekenen.
+                  </p>
                 </div>
 
-                {/* Error */}
                 {error && (
                   <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
                     {error}
                   </p>
                 )}
 
-                {/* Actions */}
                 <div className="flex gap-3 pt-1">
                   <button
                     onClick={handleSubmit}
@@ -245,5 +269,172 @@ export default function VraagDennis() {
         </div>
       )}
     </>
+  );
+}
+
+/* ---------------- Annotator ---------------- */
+
+interface AnnotatorProps {
+  src: string;
+  onCancel: () => void;
+  onDone: (dataUrl: string) => void;
+}
+
+type Stroke = { points: { x: number; y: number }[] };
+
+function Annotator({ src, onCancel, onDone }: AnnotatorProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const [strokes, setStrokes] = useState<Stroke[]>([]);
+  const [drawing, setDrawing] = useState(false);
+  const currentRef = useRef<Stroke | null>(null);
+
+  const redraw = useCallback(() => {
+    const canvas = canvasRef.current;
+    const img = imgRef.current;
+    if (!canvas || !img) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#E14C2A';
+    ctx.lineWidth = Math.max(3, canvas.width / 400);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    for (const s of strokes) {
+      if (s.points.length < 2) continue;
+      ctx.beginPath();
+      ctx.moveTo(s.points[0].x, s.points[0].y);
+      for (let i = 1; i < s.points.length; i++) {
+        ctx.lineTo(s.points[i].x, s.points[i].y);
+      }
+      ctx.stroke();
+    }
+  }, [strokes]);
+
+  // Load image and size canvas to fit viewport while preserving aspect
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      imgRef.current = img;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const maxW = Math.min(window.innerWidth - 32, 1200);
+      const maxH = window.innerHeight - 180;
+      const ratio = Math.min(maxW / img.width, maxH / img.height, 1);
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      redraw();
+    };
+    img.src = src;
+  }, [src, redraw]);
+
+  useEffect(() => {
+    redraw();
+  }, [strokes, redraw]);
+
+  const getPoint = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: ((e.clientX - rect.left) / rect.width) * canvas.width,
+      y: ((e.clientY - rect.top) / rect.height) * canvas.height,
+    };
+  };
+
+  const start = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    (e.target as HTMLCanvasElement).setPointerCapture(e.pointerId);
+    const p = getPoint(e);
+    currentRef.current = { points: [p] };
+    setDrawing(true);
+  };
+
+  const move = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!drawing || !currentRef.current) return;
+    const p = getPoint(e);
+    currentRef.current.points.push(p);
+    // Live preview without setState churn
+    const canvas = canvasRef.current;
+    if (canvas && imgRef.current) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        const pts = currentRef.current.points;
+        ctx.strokeStyle = '#E14C2A';
+        ctx.lineWidth = Math.max(3, canvas.width / 400);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(pts[pts.length - 2].x, pts[pts.length - 2].y);
+        ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+        ctx.stroke();
+      }
+    }
+  };
+
+  const end = () => {
+    if (currentRef.current && currentRef.current.points.length > 0) {
+      setStrokes((s) => [...s, currentRef.current!]);
+    }
+    currentRef.current = null;
+    setDrawing(false);
+  };
+
+  const undo = () => setStrokes((s) => s.slice(0, -1));
+  const clear = () => setStrokes([]);
+
+  const done = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    onDone(canvas.toDataURL('image/jpeg', 0.85));
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-center p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
+    >
+      <div className="mb-3 text-white text-sm font-medium">
+        Teken op de screenshot om een aanwijzing te geven
+      </div>
+      <canvas
+        ref={canvasRef}
+        onPointerDown={start}
+        onPointerMove={move}
+        onPointerUp={end}
+        onPointerCancel={end}
+        className="rounded-lg shadow-2xl bg-white touch-none"
+        style={{ cursor: 'crosshair', maxWidth: '100%', maxHeight: '70vh' }}
+      />
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+        <button
+          onClick={undo}
+          disabled={strokes.length === 0}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white text-[#1A1B1A] text-sm font-medium hover:bg-[#F0EDE8] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <Undo2 className="w-4 h-4" /> Ongedaan maken
+        </button>
+        <button
+          onClick={clear}
+          disabled={strokes.length === 0}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white text-[#1A1B1A] text-sm font-medium hover:bg-[#F0EDE8] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <Eraser className="w-4 h-4" /> Wissen
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-3 py-2 rounded-lg bg-white text-[#1A1B1A] text-sm font-medium hover:bg-[#F0EDE8] cursor-pointer"
+        >
+          Annuleren
+        </button>
+        <button
+          onClick={done}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-semibold cursor-pointer"
+          style={{ backgroundColor: '#E14C2A' }}
+        >
+          <Check className="w-4 h-4" /> Klaar
+        </button>
+      </div>
+    </div>
   );
 }
